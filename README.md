@@ -1,19 +1,18 @@
-#Apache OpenWhisk runtimes for swift
-
-[![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift)
+# Apache OpenWhisk runtimes for swift
+[![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-php.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-php)
 
 
 ### Give it a try today
 To use as a docker action
 ```
-bx wsk action update myAction myAction.php --docker openwhisk/action-php-v7.1:1.0.0
+wsk action update myAction myAction.php --docker openwhisk/action-php-v7.1:1.0.0
 ```
 This works on any deployment of Apache OpenWhisk
 
 ### To use on deployment that contains the rutime as a kind
 To use as a kind action
 ```
-bx wsk action update myAction myAction.php --kind php:7.1
+wsk action update myAction myAction.php --kind php:7.1
 ```
 
 ### Local development
