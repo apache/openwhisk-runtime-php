@@ -1,4 +1,4 @@
-# Apache OpenWhisk runtimes for swift
+# Apache OpenWhisk runtimes for PHP
 [![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-php.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-php)
 
 
