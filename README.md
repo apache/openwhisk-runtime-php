@@ -17,14 +17,14 @@ wsk action update myAction myAction.php --kind php:7.1
 
 ### Local development
 ```
-./gradlew core:swiftAction:distDocker
+./gradlew core:php7.1Action:distDocker
 ```
 This will produce the image `whisk/action-php-v7.1`
 
 Build and Push image
 ```
 docker login
-./gradlew core:swiftAction:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
+./gradlew core:php7.1Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
 Deploy OpenWhisk using ansible environment that contains the kind `php:7.1`
@@ -45,13 +45,13 @@ $ANSIBLE_CMD openwhisk.yml
 
 Or you can use `wskdev` and create a soft link to the target ansible environment, for example:
 ```
-ln -s ${ROOTDIR}/ansible/environments/local ${OPENWHISK_HOME}/ansible/environments/local-swift
-wskdev fresh -t local-swift
+ln -s ${ROOTDIR}/ansible/environments/local ${OPENWHISK_HOME}/ansible/environments/local-php
+wskdev fresh -t local-php
 ```
 
 To use as docker action push to your own dockerhub account
 ```
-docker tag whisk/swift8action $user_prefix/action-php-v7.1
+docker tag whisk/php7.1Action $user_prefix/action-php-v7.1
 docker push $user_prefix/action-php-v7.1
 ```
 Then create the action using your the image from dockerhub
