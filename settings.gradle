@@ -1,8 +1,74 @@
+import groovy.json.JsonSlurper
 include 'tests'
 
-include 'core:php7.1Action'
+/*
+    Quick example of the format of the architectures input:
 
+    {
+        "amd64": null,
+        "ppc64le": {
+            "url": "https://1.2.3.4:2376",
+            "certPath": "/home/myusername/tls/ppc64le"
+        },
+        "s390x": {
+            "url": "https://my-personal-docker.my-domain.com:2376",
+            "certPath": "/home/myusername/tls/s390x"
+        }
+    }
+ */
+
+new JsonSlurper().with { slurper ->
+    def dockerLocalJsonEnv = System.getenv('docker_local_json')
+    def dockerLocalJsonFile = new File(rootProject.projectDir, 'docker-local.json')
+
+    if (dockerLocalJsonEnv) {
+        gradle.ext.architectures = slurper.parseText(dockerLocalJsonEnv)
+    } else if (dockerLocalJsonFile.exists()) {
+        gradle.ext.architectures = slurper.parse(dockerLocalJsonFile)
+    } else {
+        gradle.ext.architectures = [ 'amd64': null ]
+    }
+}
+
+gradle.ext.dockerRegistry = System.getenv('DOCKER_REGISTRY') ?: 'docker.io'
+
+gradle.ext.registryCredentials = [
+    name: gradle.ext.dockerRegistry,
+    url: "https://${gradle.ext.dockerRegistry}/v2/" as String,
+    username: System.getenv('DOCKER_USER'),
+    password: System.getenv('DOCKER_PASSWORD'),
+    email: System.getenv('DOCKER_EMAIL') ?: 'dev@openwhisk.apache.org',
+]
+
+/* TODO - This section should really be included/imported */
+/* --- Start of project-specific configuration --- */
 rootProject.name = 'runtime-php'
+
+gradle.ext.dockerBuildProjects =
+[
+    ':core:php7.1Action': [
+        'dockerImageName': 'action-php-v7.1'
+    ]
+]
+/* --- End of project-specific configuration --- */
+
+rootProject.name = 'runtime-java'
+
+gradle.dockerBuildProjects.each() { baseProjectName, extensions ->
+    include baseProjectName
+    def baseProject = findProject(baseProjectName)
+
+    gradle.architectures.each() { architectureName, architectureClosure ->
+        def architectureProjectName = "${baseProjectName}:${architectureName}"
+        include architectureProjectName
+        def architectureProject = findProject(architectureProjectName)
+
+        logger.debug 'Setup baseProject: ' + baseProject?.path
+        logger.debug 'Setup architectureProject: ' + architectureProject?.path
+
+        architectureProject.projectDir = baseProject.projectDir
+    }
+}
 
 gradle.ext.openwhisk = [
         version: '1.0.0-SNAPSHOT'

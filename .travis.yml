@@ -30,17 +30,63 @@ notifications:
       secure: "5e+MGAQjNPdW7Hb+O8/Gj/ZJfKpfcv5QUb9GH7gWFygQvwgK4FIqKXMJi//YdnfO2c783ArHMqaftcUBHH+h9hL0eYCd7LboKQfFGsM43PazKhPVeI2DcXic8xqOR1UgWhmtq9+OQbR/SCZedSG1vrgbMfcp9fhu1lEqxmQ5rBGu9C93l9dwNdX6sMrFdmxVINab8/lwuAbw8B6TJldzya9S1xn4wbPDWqmm+YvIB478ngmzUEBo+qyY1r1WgY5SbbKTm3dUJOWyYqmPNpTcfuqQ6/YCOMEgYW13W6BAdNrPfrj2zVSTdIZ2HBjovNNI4HxrsMQPl1HUqwCDLEw0U+DRe6ep72lhuzr6q9u7ekhj8GObTWIg4pMoDqd4Fo9RcXShX4Tl+icLNwnd2BD5Lis9n6GDbzQ3TXoXGsrlrHMQw5sGCWi03jn/U0hzXNooDKLk/Dr0aQs1JyUqWTioiGJX/EFMzC3YvdulC3lRtNUld4kiSPk07Ke6a8F+9nn6GYZ1/FqZptaFA/ocC+aHlvjeB4U0BQFzgGVi88yzJz3hmjoQiSiKUoVqupBNU54XsUwrIR3iD/dOQs2QxR9PW2anghUXNf6PjdSFkBK38VmX5rHbDtWKsD4z+B+Q04dbD4WLAgni67MMgqg4dkmIo3fFhrz9XYMO0mZ66gfJ6F8="
 
 before_install:
+  #  Use GPG encryption because it reduces the number of secrets that must be
+  #  managed across repositories.  When forking a repository as a core
+  #  contributor, contact maintainer to have a newly-encrypted GPG passphrase
+  #  communicated.
+  #
+  #  Note: ${TRAVIS_REPO_SLUG%/*} is repository owner.
+- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+    for i in ./tools/travis/tls/${TRAVIS_REPO_SLUG%/*}/*/*.pem.gpg; do
+      echo "${multiarch_encryption_pwd}" | gpg --passphrase-fd 0 "$i";
+    done && cp -R ./tools/travis/tls/${TRAVIS_REPO_SLUG%/*} ./tls;
+  fi
 - "./tools/travis/setup.sh"
+
 install: true
 script:
 - "./tools/travis/build.sh && ./tools/travis/deploy.sh && ./tools/travis/test.sh"
+
 deploy:
 - provider: script
   script: "./tools/travis/publish.sh openwhisk ${TRAVIS_TAG%@*} ${TRAVIS_TAG##*@}"
+  skip_cleanup: true
   on:
     tags: true
     all_branches: true
+
 env:
   global:
+  #  --- begin: DOCKER_REGISTRY (defaults to docker.io)
+  #      + for jonpspri/incubator-openwhisk-runtime-php
+  - secure: "RRifdeJMcgeai8VGImKzwjs1IUV8NH+q+GKea+7vAksjof6UElomCqccDOYVfkTbZGuEAtR9FZEk6knxXBVxAc92yZBcpM4jdaRpdwKzHslW9oGg2foYizJcgv8avbZHWzkfvI4WMVs40KBWxAtgBvJs93M45QNM6es8T36mg6dDh7KeEdcEcLqqKJ/4L/5cShIL0douwQHDgftmEXqJuBikVCwnea70gdAsxEB+HCQaJESxYneJFX38dX26Nm1+swGtkbVRU582ScUQvurNJxgKnkjUnXfJIE/JBcxW45OW9cuv/PaZJLOtwip9yzK80Lo/jJ2WSHNo63+ZZk5bDcbeDpttT9YL0E21E15bmvWuIg1pNX+OTysQKiUsfQzEyQ2nQXdp8wX0eDz4DviwHG4e1bB+if7f7lMsOc1xdQzKfhwHORYZCZX3WyyJTS+kibBgTIZS9niUG3AsE7NTSGUHQ4WSFzp0Fg6HZ9wcrka0xLMrO1Pcy02czH5a9OVIxwxV7lAAiRHMKUXqh89uuxexvpWBHoSREHPVKfESROlARun3X8+bgvnOo6qIMA76UFnlWLsIdQMoynAV2NSivcetl0+Y1q0bchM3WgKdMye4NjHaDChnMLEtBqyJY9HSjczn3UgPV+9aETv6lIvfQoa0nmTDTjneYau207crfCE="
+  #  ---
+  #  --- begin: DOCKER_USER and DOCKER_PASSWORD
+  #      + for apache/incubator-openwhisk-runtime-php
   - secure: AJZRyRO/ZkStfywAZVN8bk1YmQLHOTD37QdjBsw77CdqnW9Y+a7V3+wZD3W+obQrEhNR9spkKlMh+biE2HFoRwr/AZ3Pl0frzhlyzZXaLUgJMK7wfQzuFVVgjODs4ld2PrJRv5LibFwco9cosDYHe9xlqQ+/Yg/QaWZPK0rBS1UFBxHh1cOcIJ0N80vDXgZbqmH9nuE7W5GvNGzDg9p16w+u48a6UF7UVzf+RU/uR13q7LrAq/FD7dtdiHpamIw4MiGWhW/GZQrwZpzovfGFr365uEVWu+ssQJld+sbeVoN9ED6kOrfYTFg+l7+8cvjhkZ9LUWELK/zVFCu4wYmuhk6utUreBD5rzsfVQmt0Ups7ANIqVS0874CW6WdxO+wPx5Me5k3azXbLgk6mPt4hL0+nlUZ1ycP2rEN/RnL2r8UJAN3vdvL1nXrTTulwNLwS8U3Lc+4yEV+YHQR9c9pYdw3VPx1vNVjEQ34djeoiVxROueBDroZfP3Ft5IazQx4sGPHWfFS1yH5JD58S7YYlz8QEope+Cby1Sj4MUJIjqlT9UgQXq1UydzAWmQPcn81scfITTAWzKHvIXxKrffiVPwkMG67uaUiobd9tDYr+CWpuKXckOSuOi0CwRuGJKyc7lGQvW2zVg7uC56bA9LMD91HYCsRUbNuOox9TXVLjGtM=
   - secure: oQ+JHub/fewOe+k3GaVGeEMflrhOY3i3lpSv67oAOMwmRnTjop9UiE8TS/54K2s+LU7iSt6xJwvMmowjmLYSbzl1lSRCk27zudxLywJbF+wo3j5GfY6mS4XD1qI2aA4MDZGbwHezUG1+bzpRefM3B1ms71NGqLCaYFasxWyEk9+44yC2sQ29LCc+O2nVJIRAs8jct8APqewkgrjHHMTWPjeixTCPPDXSl3MSumBMCpU3TBVS8vzsS9aTFj++HPMaDit1ku4FntdayZWZ/Ytu//DUUtWjCLd/rc1Xr+W/j21KKGXohvqfL3bddFUq/0RVRv5EgQW6UFslEyfVI9SMtC+Ax/b/3hRYJYD+/14b1aJ5IMn3CMdzldWTU7KXnbZlHvA3gbj5rRJFlgMS5Iizce44FM//Xi0fwhvaVFnSBvlbUJy3odwhmVkVLSFEJJipx+0FxZmKUhF2HyTuGWMa7uqQPh+WBYJ+NVvJwNfWvO/q2etyfD6wlP4VHBF2t5uV6Qipn0oyfw4PI1y96xv85SndtFdEYaCY2vooMf3k2m+rh3w7zRCM8Fsv1TVpHnikNxNaWAxB2ifu7Xd6r1pYD3diUaKim7jSse4gjoUweWGkOUUc9UtGPTGxocQT/kMqPsXNdIPsfE7xsUGSgLImtXy/L3M+CReoiN5f3Z1kigA=
+  #      + for jonpspri/incubator-openwhisk-runtime-php
+  - secure: "iwgMu6OM+muuT9P6vzgxsxQRgsIGx2FXqygrra9LPh4RqBJTGQedEkL3eDfoB5j2F2L7GwCpaTVjSj6xyXxkL54XwwlqQytmEhgp9N1A/99V+2URhWiwAqk951LTvX/n2d2Suv7qFRgSIY6v3zm6eyeQME4JRWB6rNG5JN2RMBISIFHVNBBbehqBHBDxp/Y+R2UHgajeM0zCpN4V58z6zxD7+ye7A47jLmOrEsx5DMB3xbsyuChJY8P2DgSrEvXRdO2pOSbWmMitKXP+Bm7XEFcPnzHZZzmo5n/VeMp87i/49hDAafDpC8Ktq5ed5yNaCJlvZy8XbYFDbc1v8Awr7yEZzY85jFU1zVFsedPOwXBimIaQy+i75BpxtUC4G01B5RjRPnV/4jLV3EdWJhBaJFZuj1lxX3mGhaqdEjSzCQ0QAwrDsDOaVuzfmwfPaNtPaF73iRbfIJLqWodwrTHyGOI9d8IHkgDiurN1QGtlXcpHpQEZDpjUtKxBp/r9Y7dGvTZQp2s2C1aHwphje64FL33Od82huhAFJG0HQx5xshTRlFVw3EtgnxWO5b9GL1zhPMP+yV9/6t3b0MTE8fUk0faU7Wwbjhg2Mk92GpZhwaqu5csSoI9E4Ur280q36te8JPX1VkstzFbNf4mM7im3WP0iBV+xVe4tLDfFRbYRFwQ="
+  - secure: "nsof3wuhAGz4a5jkfp4AWV3PUyWHlhGaxSbySlUyoPwHdK1JejX2XX4tuiGIhDczXQjhJnUhoWibG3GAPvWrc4Jvw8x1cr1bd8HjNpc6apZ8wpOoixA9VEpiSB+eHw4ocGd+c0I2AnpYt2MNYcz8JUI5Ead0VX93xJGtcwu14AqaBx5fHR59hZCPKRP/2XeoUwZjHAtMrg7UjFgcCfn9OcLHu9rlw9RzYmd8eqalnGFy3eOM6dE3ADXdIBQ6Du+ZYoVtNpSzqxC5X1TQnPVlcbAsXpZjrMLkukkG6VJGBz2MkeSsMQLY81eNZFlhOfERAcM4BcGS13YEaAoJVQ+C+MZPg7Wr//wlLOdfN7LtkSIAtpO1gIW5VUx2u9FuBuHi+rSDnCeEeK+VQFISFZqhB5YZ5tXqJ1gh2RfU0LjzRHAL9F1IQZMA+Ri4bqKxfF1lCAcuiYT4HQ/sAHTZZsLEz8LA+U8vWF9cmxPc6+T9raUkUNYyeUxEfKVnKs6GBQTCN6QQPcWYCJVS4Gh1RWurE59fRZlS49ZEv9uJG+KPy8XzdJRSmHv/Yxgz4Vxa3SGBLPnUQ0JNy7fs46Hp1r7Lq1jgsL5tTAN/zosGUrkmZld6J+77KGeqQbcMz/BCxbHQGZ1QaTl3Dhux0HhcyW5M6EhjizUaHnaNqr9dbB+nniE="
+  #  ---
+
+  #  --- BEGIN: DOCKER_EMAIL
+  #      + for apache/incubator-openwhisk-runtime-php
+  - secure: "wN8FwyicPEFkyfpGq1zcEU6TXkzruYfKXqtL/0ukGFnZGdsv5+dZjFfX9f3P7Gu6rwsH8EntpT8wmkBeiAr0QM7mFCtgqj3vXxD+YVvoeF2dzZYf7poyCP72MYmAGnTGY07RGfkWQ7OwqSGtSqhAT/S1ePHdap0fD6grjYqU5BDqO3gsoGe6LZnsxt5JV4RYMcLMdC9LC9cCWfqnv8m7Nk/nupzu3ReWvcfE3VZPmhpFcH839jNV9Xf0IXvbn4FyN4qsKOOMtvuhspiEAai7LySY6dcd9e8vVmHeaHMvm396y3hQQSxNugZ/STiams7bAY99WrqxDsOYGu1fB3cmPPZph5c47Sog+17bbS+LUz5JDWRL/yHaWbeXtyctkwSkrWSfD0FRHGMqLk88Ey5AqCs4t/T31HyPkWffUgTVVUlW/sIT3SVPDlDJ1Jo4TamXSX66ttEDUVdNL7DAeErCtb5l/DR4Gtx+fKae6XfeszGpmr1JMHx36tq/w9Tj58kQb7o7zOw+J3pA0G4ChynnomXOAD1ou7b4wxyPl363h6RCoUXhgQKQyGODnvoNaZoDcheEylXhI/vyDiCIAymBqxhKSYYJRFX0RR23y+A6qIw/VW26yBmKSK3sRc2jf5ZsQzR3B7XSEgmp3V4ECFBlY0X0xjyzXCC1uSQRyA6IFOI="
+  #      + for jonpspri/incubator-openwhisk-runtime-php
+  - secure: "MBtY+NBnNZUxVL5UI0AA7QQ7v6M+8g3+xEu9zTHPjHxey468N2C4M1VE6hDO1z8gHiQDDLOCNt93PAmUuFcdoNb1mbVDjULVTg05yZpGtqb09LNrF5Qwsr+Ax6DZXNmxH6dRlFt19sUh4HtQyQF5XoNaZ52iCuJ9JtUPrb+VzI+PBHhtLnhalNobfLtDPUdlUq6vKWA+uVtBXO8nQRSGsJOf5o0IR6rZJJdnsbOxTffYnfNtIaQTd3ugqdF7vsRR0qFUgjWKQ1F9QY1WlQXPDkPf8vcimzdi3Z7/d/Hc0uh/ip/v4MM4hAsqma0OO4io4f5/euXoxg/FTRrotEMIGwdopi2PqxywHlKYTVpZCMk3+M62RdS5D3zUuv4Uc90bql+xcW95kBFOspKI5AlyQ7vVXG82hS5z6Dpn0kgeuI9Q0hPeydHVslqryDoBCL5N5XoQWPZXbzRgIOzfgfZ9H0m55IanwOrva4qNRqu4FC7yRBbd/xtQR/Ec/AwgiNk994sgblRpP8OQ0qC+thsgN/2phjylfwMYVAmM4ZBVOXJNyBM22yQMnI/usmx6KPVdhmQvUO6YlwpJhnqhG3gTaoc2G1dNGxcQos23/n6+hmRjGSJC8aLm3ElFe0Md1zDI362xoEI+ZwMP+4rKPhp2FkYtT/DH/lJawXdxGBixUtg="
+  #  ---
+
+  #  --- BEGIN: The secure entry immediately below is where the GPG passphrase is encrypted by Travis
+  #      + for apache/incubator-openwhisk-runtime-php
+  - secure: "oT1XlokbLHsjX0glP8MZS1D1TZc8KogiNj0nH9k+k0NL+xoG9haQgdYODAOEgvwDOoItcOgHXv9ajUbE4FE7hD5yZdpvRpL59gK2WbGZ5S2McDzhZm3XZGXJOyx5pyMwHilqDM1fXT+XLUVsbG+AsRPEl2aiJxCmOTq38aMBm5zd2hC3BMmgWYoOri1BCyPVk35+gDXrsIsEctWOBKc86WzOl9nFOJ0kQvOzqP7WPJsRSirNKh+GU2Vv6ajz2nis16UTLN1viMQAS8IZ1mvPU6tGXV9D7nSnO+55zLrZSpAVQ4GSzK8e9pzT9wqVpiAweKTCiQvflZnlFHES/xxUwK5xyUkh0An+gSrpomvcYgLonb61craYJhnSaAV0RiX7jAHPYQ0RtDR4JrBnKOqCzKrQc26uqcx3/nSRWLpXz/0D6cQjl43cFsM7I7SP2vzg+v8O68IkkFQn//DXiuSDsZP+eT7H08c2xXXUKww/m/LFaQbyq7RbwF7yrc4O9WRAW/MC2tpx9yG9oGS8hStpq4rBHJf9BKOsSSl+0vxB9HZRqSNLGTT0n9+EGtcz2bnGc5i7QVyzm+uOEZhhXk7JZae91cP3uogdv7guYnd8cIu1n7c9gbBhIw9wCHbqBoKt7RgM6KDaiiJViu/gZg7/GZCLWeaX1OT+FUQR1cqGNts="
+  #      + for jonpspri/incubator-openwhisk-runtime-php
+  - secure: "bmt1Uj+ZUDmh6Sb4bJBoOdc4E04EfteOsnNqk1eXp9osMRo71DMBG/WD9H97FtzDpzrCNB7f5iF8VAUIkNFQ4P4FbOzF19pCKHn7goggW1zljKQWjuvUgpIxQOyijsUgRnj9fzxF5tfUMRo36uCXqTByj6RonMLlGJHWZiH7HOZUa1jg3hJq8Jx8cHbJPHbz6t5RLBeCsmatwca4NHTWiGRTlgcG7BIG8o3yld1T8H5DP9qwSqYSdY9MixR6OdCBIv+NweGY/PejSKrlAp0S2xItxPmmzkLHmGOjZKsYqTnQ1LMjxgZ0nutBGO9/LfOeVQc0S76BtNGq4naY+4z7RydD7JrsLEbY2qJ6MgadIyRX5W9K+v10f2qknTbMdbi6XqyHg8NbgvoabkAHn5bzUDv7rDX8SrnyATDwMyCgviLOqhN/SlfpdEndZ1nBCxrrURhmUI3L1c2guut/PizRCn0+x+wGPIn9lNUAXVS1MUMeED/WENNRpTIy+oKYaLc1ZtZuNgh68MKt9lTBcmCko2cqxPaaE6u7zvLR1hvNx/UFhnps6cz7tntaem2jehEUeV2Jb/ZY7o3Cp/kNKq48ROZAZPadVmRIGfGeZ+5K2t6q7GdJfRcn9UVgoSBcp8f/SCGTPWCAMGItsDn9uU/6aZnuD44VEC1qIMJFl4c9x3o="
+  #  ----
+
+  #  --- BEGIN: The 'docker_local_json' variable configures docker engines
+  #             to use for multi-architecture builds.
+  #      + for apache/incubator-openwhisk-runtime-php
+  - secure: "cWkC9/sX3QDp3rKsl52Vy8a6CeaBYUTfAAl6EBEtv7l7BbPYOG5gogNWt0YDZhfqiUIX9f5rl3p7hGTw/htjnjE+g4pufouVqCtNbL1CbOjWEsPbzOFd18xPqWuswOPLFMtuh73In+hj8j+qONvx6tMwKaundZTPatI4C50W8yEKoiVs/gX/MQmIGNgDR/b0CY0tjzJkjE4NOiqlwEjx8VEACTIU1djjl/3GFg/fh2v2ysFssrSkQovaVNSlaUlMRLprgCyxL8gY0BmHeW5WLISRvElPLKFTt0ihZoIxID6vZ55xNH6hhl0DcBv4XBWQHr42D7a8XptwvkRoTI0fczMOxSoV+yf37M7PthkZC36X4QW7yB7cs7V+ZPVrz7QC0LAzXpthy0YCCpPH5MFPiBRt3OJzs/mioXTH96OPMD8NBtzl09O1TWSPHDtT5yfsNzbunjnQaG+RYPsGhiEvZhALXh8VdS/EJ5ylbQlsDdfgAMM07prlKUcLzKqmsIfJnBFg36kp0Rutg7BS5EamYvjS+RajqzdApBmcr1ozKHlm3KxlaXlAScL63V2NHgDAO1FHFYO0MwLSt+D5MMTmhnm+D3+lhjk7xg+Yrg4C+xqu4xQMo7Sc6ZHfJsrGrzfhzxAsRXTdXICnNxwu7+JzLhMm6eruwky/KkfW7bscd2w="
+  #      + for jonpspri/incubator-openwhisk-runtime-php
+  - secure: "coP3eRsbxTM5CB3G4xGEM1kjsfktTIpxiEqR7wZgXod4IBRwAlgGobe3BlhLR3RbH8sa2rSA1BF2kT6m8jF0MlceGAwgQtMwU4pjCcxBCwOqF2/QvcDGVDB6cu73dfGxVQls0vmvu+3ki9tcMqDd6luV5CkoLhJNK2RLqCJi1pxE/WYhm7S591GrO5ymGQLkHZIMJf1nFl90Lgdt4827FB3kn5q3N60JUIBF+R/4/rDJ6RX8+4aT0iEUt56D1y/d3KYZcGUeLHDzULMGHJvG09BneGaPtX8LchY7mdR6/0uUNX46GX8drhUl/R+h+EEux3Y+Ox2op8p7QcwT8yrGJgP3KzY/WHK0M5eEbj6DQXeRS7lsFVQX+DSsyNHOiOnflWqt7B0ZArapFMfyKEbG5hoZR0uodc0eo6NprBzdQgIul1ORWTV86Hd9s2O17c4Wvx3MFCdKb/iX6kki47qNfTRfVxfJNYpaS+ABg+KtYJMKWzC/OUigmA96WErQpx6F7i9doIa5IgXVZ2bUzwrWejW3CgSAZXJ1hTkJtW0HzqE3KL0DYXZ20yGr0INZoKevK1d6ABAaY9qgohzAjZE9L2iQyqvogabiMYHvpHZclCJvMVwvnfMLa2HGRSlEH37HwpOdbtNT1HLnT1M03WdKqh8Gokh/MCyfspvZyjoPSCg="

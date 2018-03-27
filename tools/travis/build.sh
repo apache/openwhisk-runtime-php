@@ -20,9 +20,9 @@ set -ex
 
 # Build script for Travis-CI.
 
-SCRIPTDIR=$(cd $(dirname "$0") && pwd)
-ROOTDIR="$SCRIPTDIR/../.."
-WHISKDIR="$ROOTDIR/../openwhisk"
+SCRIPTDIR="$(cd "$(dirname "$0")" && pwd)"
+ROOTDIR="$(cd "$SCRIPTDIR/../.." && pwd)"
+WHISKDIR="$(cd "$ROOTDIR/../openwhisk" && pwd)"
 
 export OPENWHISK_HOME=$WHISKDIR
 
@@ -39,14 +39,12 @@ docker tag openwhisk/invoker ${IMAGE_PREFIX}/invoker
 docker pull openwhisk/nodejs6action
 docker tag openwhisk/nodejs6action ${IMAGE_PREFIX}/nodejs6action
 
-TERM=dumb ./gradlew \
+./gradlew --console=plain \
 :common:scala:install \
 :core:controller:install \
 :core:invoker:install \
 :tests:install
 
 # Build runtime
-cd $ROOTDIR
-TERM=dumb ./gradlew \
-:core:php7.1Action:distDocker \
--PdockerImagePrefix=${IMAGE_PREFIX}
+cd "$ROOTDIR"
+./gradlew --console=plain dockerBuildImage -PdockerImagePrefix=${IMAGE_PREFIX}

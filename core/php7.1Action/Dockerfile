@@ -1,24 +1,16 @@
-FROM php:7.1-alpine
+FROM php:7.1-jessie
 
-RUN \
-    
-    apk update && apk upgrade && \
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+        git \
+        libicu-dev \
+        libpng-dev \
+        libpq-dev \
+        libxml2-dev \
+ && rm -rf /var/lib/apt/lists/*
 
-    # install dependencies
-   apk add \
-       postgresql-dev \
-       icu \
-       icu-libs \
-       icu-dev \
-       freetype-dev \
-       libjpeg-turbo-dev \
-       libpng-dev \
-       libxml2-dev \
-
-   && \
-
-   # install useful PHP extensions
-   docker-php-ext-install \
+# install useful PHP extensions
+RUN docker-php-ext-install \
        opcache \
        mysqli \
        pdo_mysql \
@@ -39,12 +31,16 @@ RUN mkdir -p /action/src
 
 # install Composer dependencies
 COPY composer.json /action
-RUN cd /action && /usr/bin/composer install --no-plugins --no-scripts --prefer-dist --no-dev -o && rm composer.lock
+RUN cd /action \
+ && /usr/bin/composer install --no-plugins --no-scripts --prefer-dist --no-dev -o \
+ && rm composer.lock
 
 # copy required files
 COPY router.php /action
 COPY runner.php /action
 
 # Run webserver on port 8080
-
+EXPOSE 8080
 CMD [ "php", "-S", "0.0.0.0:8080", "-d", "expose_php=0", "-d", "html_errors=0", "-d", "error_reporting=E_ALL", "/action/router.php" ]
+
+# VIM: let g:syntastic_dockerfile_hadolint_args = "--ignore DL3003 --ignore DL3008"
