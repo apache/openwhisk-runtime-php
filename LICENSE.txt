@@ -187,7 +187,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2016-present The Apache Software Foundation
+   Copyright 2016-2018 The Apache Software Foundation
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -200,61 +200,3 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-
-========================================================================
-PHP License v3.01
-========================================================================
-
-This distribution has binary dependencies on the following components, which are available under a PHP License (http://www.php.net/license/3_01.txt).
-PHP 7.1 (php - http://www.php.net/)
-  License included at licenses/LICENSE-php.txt, or htps://www.php.net/license/3_0.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-
-This distribution depends on the following components, which are available under a PHP License (http://www.php.net/license/3_01.txt).
-OPcache latest (opcache - https://github.com/php/php-src/tree/master/ext/)
-  License included at licenses/LICENSE-opcache.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-PDO_mysql latest (pdo_mysql - https://pecl.php.net/package/PDO_MYSQL/)
-  License included at licenses/LICENSE-pdomysql.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-PDO_pgsql latest (pdo_pgsql - https://pecl.php.net/package/PDO_PGSQL/)
-  License included at licenses/LICENSE-pdopgsql.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-Intl latest (intl - https://github.com/php/php-src/)
-  License included at licenses/LICENSE-intl.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-BCMath latest (bcmath - https://github.com/php/php-src/tree/master/ext/)
-  License included at licenses/LICENSE-bcmath.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-Mysqli latest (mysqli - https://github.com/php/php-src/tree/master/ext/)
-  License included at licenses/LICENSE-mysqli.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-Gd latest (gd - https://github.com/php/php-src/tree/master/ext/)
-  License included at licenses/LICENSE-gd.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-Zip latest (zip - https://github.com/php/php-src/tree/master/ext/)
-  License included at licenses/LICENSE-zip.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-Soap latest (soap - https://github.com/php/php-src/tree/master/ext/)
-  License included at licenses/LICENSE-soap.txt
-  Copyright (c) 1999 - 2018 The PHP Group. All rights reserved.
-
-
-========================================================================
-MIT License
-========================================================================
-
-This distribution depends on the following components, which are available under an MIT License (https://opensource.org/licenses/MIT).
-Docker-php-ext-install latest (docker-php-ext-install - https://github.com/docker-library/php/)
-  License included at licenses/LICENSE-dockerphpext.txt, or https://github.com/docker-library/php/blob/master/LICENSE
-  Copyright (c) 2014-2016 Docker, Inc.
