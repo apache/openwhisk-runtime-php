@@ -19,11 +19,10 @@ package runtime.actionContainers
 
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-
-import ActionContainer.withContainer
-import ResourceHelpers.ZipBuilder
-
 import common.WskActorSystem
+import actionContainers.{ActionContainer, BasicActionRunnerTests}
+import actionContainers.ActionContainer.withContainer
+import actionContainers.ResourceHelpers.ZipBuilder
 import spray.json._
 
 @RunWith(classOf[JUnitRunner])
