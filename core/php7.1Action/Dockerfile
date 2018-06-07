@@ -18,9 +18,7 @@
 FROM php:7.1.18-alpine
 
 RUN \
-
     apk update && apk upgrade && \
-
     # install dependencies
    apk add \
        postgresql-dev \
@@ -31,9 +29,7 @@ RUN \
        libjpeg-turbo-dev \
        libpng-dev \
        libxml2-dev \
-
    && \
-
    # install useful PHP extensions
    docker-php-ext-install \
        opcache \
