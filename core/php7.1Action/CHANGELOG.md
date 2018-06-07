@@ -19,14 +19,14 @@
 
 ## 1.0.1
 
-- Change: Update PHP to 7.1.8
+- Change: Update PHP to 7.1.18
 - Change: Update [guzzlehttp/guzzle](https://packagist.org/packages/guzzlehttp/guzzle) to 6.3.3
 - Change: Update [ramsey/uuid](https://packagist.org/packages/ramsey/uuid) to 3.7.3
 
 ## 1.0.0
 Initial release
 
-- Added: PHP: 7.1.9.
+- Added: PHP: 7.1.9
 - Added: PHP extensions in addition to the standard ones:
     - bcmath
     - curl
