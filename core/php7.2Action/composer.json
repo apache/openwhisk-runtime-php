@@ -1,0 +1,11 @@
+{
+    "config": {
+        "platform": {
+            "php": "7.2"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "6.3.3",
+        "ramsey/uuid": "3.7.3"
+    }
+}
