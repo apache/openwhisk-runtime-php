@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class Php71ActionContainerTests extends Php7ActionContainerTests {
+class Php72ActionContainerTests extends Php7ActionContainerTests {
 
-  override lazy val phpContainerImageName = "action-php-v7.1"
+  override lazy val phpContainerImageName = "action-php-v7.2"
 }
