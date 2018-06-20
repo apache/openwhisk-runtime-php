@@ -40,9 +40,15 @@ runtimes_manifest:
       deprecated: false
     php:
     - kind: "php:7.1"
-      default: true
+      default: false
       image:
         name: "action-php-v7.1"
+      deprecated: false
+    php:
+    - kind: "php:7.2"
+      default: true
+      image:
+        name: "action-php-v7.2"
       deprecated: false
   blackboxes:
     - name: "dockerskeleton"

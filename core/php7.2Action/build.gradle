@@ -15,13 +15,5 @@
  * limitations under the License.
  */
 
-package runtime.actionContainers
-
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-
-@RunWith(classOf[JUnitRunner])
-class Php71ActionContainerTests extends Php7ActionContainerTests {
-
-  override lazy val phpContainerImageName = "action-php-v7.1"
-}
+ext.dockerImageName = 'action-php-v7.2'
+apply from: '../../gradle/docker.gradle'
