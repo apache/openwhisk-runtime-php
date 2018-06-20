@@ -34,9 +34,9 @@ if [[ ! -z ${DOCKER_USER} ]] && [[ ! -z ${DOCKER_PASSWORD} ]]; then
 docker login -u "${DOCKER_USER}" -p "${DOCKER_PASSWORD}"
 fi
 
-if [[ ! -z ${RUNTIME} ]]; then
+if [[ ! -z ${RUNTIME_VERSION} ]]; then
 TERM=dumb ./gradlew \
-:core:php${RUNTIME}Action:distDocker \
+:core:php${RUNTIME_VERSION}Action:distDocker \
 -PdockerRegistry=docker.io \
 -PdockerImagePrefix=${IMAGE_PREFIX} \
 -PdockerImageTag=${IMAGE_TAG}
