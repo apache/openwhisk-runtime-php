@@ -122,6 +122,11 @@ function sendResponse(array $result) : void
  */
 function init() : array
 {
+    // check that we haven't already been initialised
+    if (file_exists(ACTION_CONFIG_FILE)) {
+        throw new RuntimeException('Cannot initialize the action more than once.', 403);
+    }
+
     // data is POSTed to us as a JSON string
     $post = file_get_contents('php://input');
     $data = json_decode($post, true)['value'] ?? [];
