@@ -17,6 +17,10 @@
 #
 -->
 
+## 1.0.2
+Changes:
+  - Disallow re-initialization of function.
+
 ## 1.0.1
 
 - Change: Update PHP to 7.1.18
