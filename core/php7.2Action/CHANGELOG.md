@@ -17,6 +17,10 @@
 #
 -->
 
+## 1.0.1
+Changes:
+  - Disallow re-initialization of function.
+
 ## 1.0.0
 Initial release
 

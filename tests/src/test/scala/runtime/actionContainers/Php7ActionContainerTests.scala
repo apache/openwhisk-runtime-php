@@ -27,11 +27,10 @@ import spray.json._
 
 @RunWith(classOf[JUnitRunner])
 abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
-  // note: "out" will not be empty as the PHP web server outputs a message when
-  // it starts up
+  // note: "out" will not be empty as the PHP web server outputs a message when it starts up
   val enforceEmptyOutputStream = false
 
-  lazy val phpContainerImageName = "action-php-v7.x"
+  lazy val phpContainerImageName: String = ???
 
   override def withActionContainer(env: Map[String, String] = Map.empty)(code: ActionContainer => Unit) = {
     withContainer(phpContainerImageName, env)(code)
@@ -41,30 +40,56 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
   behavior of phpContainerImageName
 
-  testEcho(Seq {
-    (
-      "PHP",
-      """
-          |<?php
-          |function main(array $args) : array {
-          |    echo 'hello stdout';
-          |    error_log('hello stderr');
-          |    return $args;
-          |}
-          """.stripMargin)
-  })
+  override val testNoSourceOrExec = TestConfig("")
 
-  testNotReturningJson("""
+  override val testNotReturningJson = {
+    TestConfig(
+      """
+       |<?php
+       |function main(array $args) {
+       |    return "not a json object";
+       |}
+     """.stripMargin,
+      enforceEmptyOutputStream = enforceEmptyOutputStream,
+      enforceEmptyErrorStream = false)
+  }
+
+  override val testInitCannotBeCalledMoreThanOnce = {
+    TestConfig(
+      """
         |<?php
-        |function main(array $args) {
-        |    return "not a json object";
+        |function main(array $args) : array {
+        |    return $args;
         |}
-        """.stripMargin)
+      """.stripMargin,
+      enforceEmptyOutputStream = enforceEmptyOutputStream)
+  }
 
-  testUnicode(Seq {
-    (
-      "PHP",
+  override val testEntryPointOtherThanMain = {
+    TestConfig(
       """
+        | <?php
+        | function niam(array $args) {
+        |     return $args;
+        | }
+      """.stripMargin,
+      main = "niam",
+      enforceEmptyOutputStream = enforceEmptyOutputStream)
+  }
+
+  override val testEcho = {
+    TestConfig("""
+                 |<?php
+                 |function main(array $args) : array {
+                 |    echo 'hello stdout';
+                 |    error_log('hello stderr');
+                 |    return $args;
+                 |}
+               """.stripMargin)
+  }
+
+  override val testUnicode = {
+    TestConfig("""
          |<?php
          |function main(array $args) : array {
          |    $str = $args['delimiter'] . " ☃ " . $args['delimiter'];
@@ -72,37 +97,37 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
          |    return  ["winter" => $str];
          |}
          """.stripMargin.trim)
-  })
+  }
 
-  testEnv(
-    Seq {
-      (
-        "PHP",
-        """
-         |<?php
-         |function main(array $args) : array {
-         |    return [
-         |       "env" => $_ENV,
-         |       "api_host" => $_ENV['__OW_API_HOST'],
-         |       "api_key" => $_ENV['__OW_API_KEY'],
-         |       "namespace" => $_ENV['__OW_NAMESPACE'],
-         |       "action_name" => $_ENV['__OW_ACTION_NAME'],
-         |       "activation_id" => $_ENV['__OW_ACTIVATION_ID'],
-         |       "deadline" => $_ENV['__OW_DEADLINE'],
-         |    ];
-         |}
-         """.stripMargin.trim)
-    },
-    enforceEmptyOutputStream)
+  override val testEnv = {
+    TestConfig(
+      """
+        |<?php
+        |function main(array $args) : array {
+        |    return [
+        |       "env" => $_ENV,
+        |       "api_host" => $_ENV['__OW_API_HOST'],
+        |       "api_key" => $_ENV['__OW_API_KEY'],
+        |       "namespace" => $_ENV['__OW_NAMESPACE'],
+        |       "action_name" => $_ENV['__OW_ACTION_NAME'],
+        |       "activation_id" => $_ENV['__OW_ACTIVATION_ID'],
+        |       "deadline" => $_ENV['__OW_DEADLINE'],
+        |    ];
+        |}
+      """.stripMargin.trim,
+      enforceEmptyOutputStream = enforceEmptyOutputStream)
+  }
 
-  testInitCannotBeCalledMoreThanOnce("""
-          |<?php
-          |function main(array $args) : array {
-          |    echo 'hello stdout';
-          |    error_log('hello stderr');
-          |    return $args;
-          |}
-          """.stripMargin)
+  override val testLargeInput = {
+    TestConfig("""
+                 |<?php
+                 |function main(array $args) : array {
+                 |    echo 'hello stdout';
+                 |    error_log('hello stderr');
+                 |    return $args;
+                 |}
+               """.stripMargin)
+  }
 
   it should "fail to initialize with bad code" in {
     val (out, err) = withPhp7Container { c =>
@@ -125,19 +150,6 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
         (o + e).toLowerCase should include("error")
         (o + e).toLowerCase should include("syntax")
     })
-  }
-
-  it should "fail to initialize with no code" in {
-    val (out, err) = withPhp7Container { c =>
-      val code = ""
-
-      val (initCode, error) = c.init(initPayload(code))
-
-      initCode should not be (200)
-      error shouldBe a[Some[_]]
-      error.get shouldBe a[JsObject]
-      error.get.fields("error").toString should include("No code to execute")
-    }
   }
 
   it should "return some error on action error" in {
@@ -465,21 +477,6 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
         (o + e).toLowerCase should include("error")
         (o + e).toLowerCase should include("syntax")
     })
-  }
-
-  it should "support actions using non-default entry point" in {
-    val (out, err) = withPhp7Container { c =>
-      val code = """
-            | <?php
-            | function niam(array $args) {
-            |     return [result => "it works"];
-            | }
-            """.stripMargin
-
-      c.init(initPayload(code, main = "niam"))._1 should be(200)
-      val (runCode, runRes) = c.run(runPayload(JsObject()))
-      runRes.get.fields.get("result") shouldBe Some(JsString("it works"))
-    }
   }
 
   it should "support zipped actions using non-default entry point" in {

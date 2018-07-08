@@ -108,7 +108,7 @@ function init() : array
     $binary = $data['binary'] ?? false;  // code is binary?
 
     if (!$code) {
-        throw new RuntimeException("No code to execute");
+        throw new RuntimeException("Missing main/no code to execute.");
     }
 
     if ($binary) {
