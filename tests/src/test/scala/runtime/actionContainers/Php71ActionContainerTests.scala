@@ -24,4 +24,7 @@ import org.scalatest.junit.JUnitRunner
 class Php71ActionContainerTests extends Php7ActionContainerTests {
 
   override lazy val phpContainerImageName = "action-php-v7.1"
+
+  override val testLargeInput = TestConfig("", skipTest = true)
+
 }
