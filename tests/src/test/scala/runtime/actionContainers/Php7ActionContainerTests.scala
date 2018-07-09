@@ -119,16 +119,14 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   override val testLargeInput = {
-    TestConfig(
-      """
+    TestConfig("""
         |<?php
         |function main(array $args) : array {
         |    echo 'hello stdout';
         |    error_log('hello stderr');
         |    return $args;
         |}
-      """.stripMargin,
-      skipTest = true)
+      """.stripMargin)
   }
 
   it should "fail to initialize with bad code" in {
