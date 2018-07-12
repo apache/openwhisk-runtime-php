@@ -27,12 +27,12 @@ deploy:
       all_branches: true
       repo: apache/incubator-openwhisk-runtime-php
   - provider: script
-    script: "./tools/travis/publish.sh openwhisk 7.1 master"
+    script: "./tools/travis/publish.sh openwhisk 7.1 latest"
     on:
       branch: master
       repo: apache/incubator-openwhisk-runtime-php
   - provider: script
-    script: "./tools/travis/publish.sh openwhisk 7.2 master"
+    script: "./tools/travis/publish.sh openwhisk 7.2 latest"
     on:
       branch: master
       repo: apache/incubator-openwhisk-runtime-php
