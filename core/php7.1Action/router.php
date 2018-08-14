@@ -197,8 +197,8 @@ function run() : array
         return stripos($k, '__OW_') === 0;
     }, ARRAY_FILTER_USE_KEY);
     $env['PHP_VERSION'] = $_ENV['PHP_VERSION'];
-    foreach (['api_key', 'namespace', 'action_name', 'activation_id', 'deadline'] as $param) {
-        if (array_key_exists($param, $post)) {
+    foreach (array_keys($post) as $param) {
+        if ($param !== "value") {
             $env['__OW_' . strtoupper($param)] = $post[$param];
         }
     }

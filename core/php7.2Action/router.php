@@ -218,8 +218,8 @@ function run() : array
     }
 
     // assign environment variables from the posted data
-    foreach (['api_key', 'namespace', 'action_name', 'activation_id', 'deadline'] as $param) {
-        if (array_key_exists($param, $post)) {
+    foreach (array_keys($post) as $param) {
+        if ($param !== "value") {
             $_ENV['__OW_' . strtoupper($param)] = $post[$param];
         }
     }

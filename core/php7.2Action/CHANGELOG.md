@@ -17,6 +17,10 @@
 #
 -->
 
+## 1.0.2
+Changes:
+  - Allow /run endpoint to accept more environment variables [#40](https://github.com/apache/incubator-openwhisk-runtime-php/pull/40)
+
 ## 1.0.1
 Changes:
   - Disallow re-initialization of function.
