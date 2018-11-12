@@ -291,8 +291,8 @@ function unzipString(string $b64Data, $dir): void
 function writeSentinels() : void
 {
     // write out sentinels as we've finished all log output
-    writeTo("php://stderr", "XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX");
-    writeTo("php://stdout", "XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX");
+    writeTo("php://stderr", "\nXXX_THE_END_OF_A_WHISK_ACTIVATION_XXX");
+    writeTo("php://stdout", "\nXXX_THE_END_OF_A_WHISK_ACTIVATION_XXX");
 }
 
 /**
