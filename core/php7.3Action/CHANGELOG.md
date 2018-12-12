@@ -1,4 +1,4 @@
-#!/bin/bash
+<!--
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -15,33 +15,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+-->
 
-set -ex
+## 1.0.0
+Initial release
 
-# Build script for Travis-CI.
-
-SCRIPTDIR=$(cd $(dirname "$0") && pwd)
-ROOTDIR="$SCRIPTDIR/../.."
-WHISKDIR="$ROOTDIR/../openwhisk"
-UTILDIR="$ROOTDIR/../incubator-openwhisk-utilities"
-
-export OPENWHISK_HOME=$WHISKDIR
-
-# run scancode using the ASF Release configuration
-cd $UTILDIR
-scancode/scanCode.py --config scancode/ASF-Release.cfg $ROOTDIR
-
-# Build OpenWhisk deps before we run tests
-cd $WHISKDIR
-TERM=dumb ./gradlew install
-# Mock file (works around bug upstream)
-echo "openwhisk.home=$WHISKDIR" > whisk.properties
-echo "vcap.services.file=" >> whisk.properties
-
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-docker version
-
-# Build runtime
-cd $ROOTDIR
-TERM=dumb ./gradlew distDocker
+- Added: PHP: 7.3.0
+- Added: PHP extensions in addition to the standard ones:
+    - bcmath
+    - curl
+    - gd
+    - intl
+    - mbstring
+    - mysqli
+    - pdo_mysql
+    - pdo_pgsql
+    - pdo_sqlite
+    - soap
+    - zip
+- Added: Composer packages:
+    - [guzzlehttp/guzzle](https://packagist.org/packages/guzzlehttp/guzzle): 6.3.3
+    - [ramsey/uuid](https://packagist.org/packages/ramsey/uuid): 3.8.0
