@@ -17,6 +17,10 @@
 #
 -->
 
+## Apache 1.13.0-incubating (next release)
+Changes:
+  - Update version of PHP to 7.2.13
+
 ## 1.0.2
 Changes:
   - Allow /run endpoint to accept more environment variables [#40](https://github.com/apache/incubator-openwhisk-runtime-php/pull/40)

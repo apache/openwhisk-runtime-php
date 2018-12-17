@@ -17,7 +17,7 @@
 #
 -->
 
-## 1.0.0
+## Apache 1.13.0-incubating (next release)
 Initial release
 
 - Added: PHP: 7.3.0
