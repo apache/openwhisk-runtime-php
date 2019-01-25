@@ -17,7 +17,7 @@
 
 FROM openwhisk/actionloop:410d006 as builder
 
-FROM php:7.3.0-cli-stretch
+FROM php:7.3.1-cli-stretch
 
 # install dependencies
 RUN \

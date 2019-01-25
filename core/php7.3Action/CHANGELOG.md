@@ -20,7 +20,7 @@
 ## Apache 1.13.0-incubating (next release)
 Initial release
 
-- Added: PHP: 7.3.0
+- Added: PHP: 7.3.1
 - Added: PHP extensions in addition to the standard ones:
     - bcmath
     - curl
