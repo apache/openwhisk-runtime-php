@@ -19,7 +19,7 @@
 
 ## Apache 1.13.0-incubating (next release)
 Changes:
-  - Update version of PHP to 7.2.13
+  - Update version of PHP to 7.2.15
 
 ## 1.0.2
 Changes:
