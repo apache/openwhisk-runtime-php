@@ -15,9 +15,9 @@
 # limitations under the License.
 #
 
-FROM openwhisk/actionloop:410d006 as builder
+FROM openwhisk/actionloop:42fd5e6 as builder
 
-FROM php:7.3.2-cli-stretch
+FROM php:7.3.3-cli-stretch
 
 # install dependencies
 RUN \
