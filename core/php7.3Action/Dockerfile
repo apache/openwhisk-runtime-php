@@ -23,7 +23,7 @@ RUN curl -L "$PROXY_SOURCE" | tar xzf - \
      src/github.com/apache/incubator-openwhisk-runtime-go \
   && cd src/github.com/apache/incubator-openwhisk-runtime-go/main \
   && CGO_ENABLED=0 go build -o /bin/proxy
-FROM php:7.3.3-cli-stretch
+FROM php:7.3.5-cli-stretch
 
 # install dependencies
 RUN \

@@ -16,8 +16,11 @@
 # limitations under the License.
 #
 -->
+## Apache 1.14.0-incubating (next release)
+Changes:
+  - Update version of PHP to 7.3.5
 
-## Apache 1.13.0-incubating (next release)
+## Apache 1.13.0-incubating
 Initial release
 
 - Added: PHP: 7.3.3
