@@ -51,7 +51,9 @@ RUN \
       pdo_mysql \
       pdo_pgsql \
       soap \
-      zip
+      zip \
+      && pecl install mongodb \
+      && docker-php-ext-enable mongodb
 
 COPY php.ini /usr/local/etc/php
 
