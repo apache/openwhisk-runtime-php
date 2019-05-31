@@ -19,6 +19,8 @@
 ## Apache 1.14.0-incubating (next release)
 Changes:
   - Update version of PHP to 7.3.5
+  - Added PHP extension mongodb
+
 
 ## Apache 1.13.0-incubating
 Initial release
