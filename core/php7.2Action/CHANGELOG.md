@@ -19,7 +19,7 @@
 
 ## Apache 1.14.0-incubating (next release)
 Changes:
-  - Update version of PHP to 7.2.18
+  - Update version of PHP to 7.2.19
 
 ## Apache 1.13.0-incubating
 Changes:
