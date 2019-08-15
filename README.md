@@ -19,7 +19,7 @@
 
 # Apache OpenWhisk runtimes for PHP
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-php.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-php)
+[![Build Status](https://travis-ci.org/apache/openwhisk-runtime-php.svg?branch=master)](https://travis-ci.org/apache/openwhisk-runtime-php)
 
 
 ## PHP versions
@@ -150,7 +150,3 @@ Using IntelliJ:
 -Dhttp.proxyHost=localhost
 -Dhttp.proxyPort=3128
 ```
-
-# Disclaimer
-
-Apache OpenWhisk Runtime PHP is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
