@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 -->
-## Apache 1.14.0-incubating (next release)
+## Apache 1.14.0 (next release)
 Changes:
   - Update version of PHP to 7.3.6
   - Added PHP extension mongodb
