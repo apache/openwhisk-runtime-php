@@ -34,6 +34,7 @@ RUN \
       libicu57 \
       libjpeg-dev \
       libpng-dev \
+      libssl-dev \
       libxml2-dev \
       libzip-dev \
       postgresql-server-dev-9.6 \
