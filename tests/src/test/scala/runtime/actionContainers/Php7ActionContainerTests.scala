@@ -24,6 +24,7 @@ import actionContainers.{ActionContainer, BasicActionRunnerTests}
 import actionContainers.ActionContainer.withContainer
 import actionContainers.ResourceHelpers.ZipBuilder
 import spray.json._
+import spray.json.DefaultJsonProtocol._
 
 @RunWith(classOf[JUnitRunner])
 abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
@@ -156,6 +157,62 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
         (o + e).toLowerCase should include("nooooo")
     })
 
+  }
+
+  it should s"confirm getenv can read environment variables" in {
+    val config = {
+      TestConfig(
+        """
+          |<?php
+          |function main(array $args) : array {
+          |    return [
+          |       "api_host" => getenv('__OW_API_HOST'),
+          |       "api_key" => getenv('__OW_API_KEY'),
+          |       "namespace" => getenv('__OW_NAMESPACE'),
+          |       "action_name" => getenv('__OW_ACTION_NAME'),
+          |       "action_version" => getenv('__OW_ACTION_VERSION'),
+          |       "activation_id" => getenv('__OW_ACTIVATION_ID'),
+          |       "deadline" => getenv('__OW_DEADLINE'),
+          |    ];
+          |}
+        """.stripMargin.trim,
+        enforceEmptyOutputStream = enforceEmptyOutputStream)
+    }
+
+    val props = Seq(
+      "api_host" -> "xyz",
+      "api_key" -> "abc",
+      "namespace" -> "zzz",
+      "action_name" -> "xxx",
+      "action_version" -> "0.0.1",
+      "activation_id" -> "iii",
+      "deadline" -> "123")
+
+    val env = props.map { case (k, v) => s"__OW_${k.toUpperCase()}" -> v }
+
+    // the api host is sent as a docker run environment parameter
+    val (out, err) = withActionContainer(env.take(1).toMap) { c =>
+      val (initCode, _) = c.init(initPayload(config.code, config.main))
+      initCode should be(200)
+
+      // we omit the api host from the run payload so the docker run env var is used
+      val (runCode, out) = c.run(runPayload(JsObject.empty, Some(props.drop(1).toMap.toJson.asJsObject)))
+      runCode should be(200)
+      out shouldBe defined
+      props.map {
+        case (k, v) =>
+          withClue(k) {
+            out.get.fields(k) shouldBe JsString(v)
+          }
+
+      }
+    }
+
+    checkStreams(out, err, {
+      case (o, e) =>
+        if (config.enforceEmptyOutputStream) o shouldBe empty
+        if (config.enforceEmptyErrorStream) e shouldBe empty
+    })
   }
 
   it should "support application errors" in {
