@@ -20,6 +20,7 @@
 ## Apache 1.14.0 (next release)
 Changes:
   - Update version of PHP to 7.1.30
+  - Support getenv()
 
 ## Apache 1.13.0-incubating
 Changes:
