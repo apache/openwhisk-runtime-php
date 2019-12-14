@@ -199,7 +199,9 @@ function run() : array
     $env['PHP_VERSION'] = $_ENV['PHP_VERSION'];
     foreach (array_keys($post) as $param) {
         if ($param !== "value") {
-            $env['__OW_' . strtoupper($param)] = $post[$param];
+            $envKeyName = '__OW_' . strtoupper($param);
+            $env[$envKeyName] = $post[$param];
+            putenv($envKeyName . '=' . $post[$param]);
         }
     }
 

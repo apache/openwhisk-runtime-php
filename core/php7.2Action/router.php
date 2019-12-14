@@ -220,7 +220,9 @@ function run() : array
     // assign environment variables from the posted data
     foreach (array_keys($post) as $param) {
         if ($param !== "value") {
-            $_ENV['__OW_' . strtoupper($param)] = $post[$param];
+            $envKeyName = '__OW_' . strtoupper($param);
+            $_ENV[$envKeyName] = $post[$param];
+            putenv($envKeyName . '=' . $post[$param]);
         }
     }
 
