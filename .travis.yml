@@ -16,12 +16,12 @@
 #
 
 sudo: required
-group: deprecated-2017Q3
-language: scala
-scala:
-  - 2.12.7
+dist: xenial
+jdk: openjdk8
+language: java
 services:
   - docker
+
 notifications:
   email: false
   webhooks:
