@@ -110,6 +110,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
         |       "api_key" => $_ENV['__OW_API_KEY'],
         |       "namespace" => $_ENV['__OW_NAMESPACE'],
         |       "action_name" => $_ENV['__OW_ACTION_NAME'],
+        |       "action_version" => $_ENV['__OW_ACTION_VERSION'],
         |       "activation_id" => $_ENV['__OW_ACTIVATION_ID'],
         |       "deadline" => $_ENV['__OW_DEADLINE'],
         |    ];
