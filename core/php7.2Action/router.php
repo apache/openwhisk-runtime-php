@@ -229,7 +229,6 @@ function run() : array
     if (array_key_exists('value', $post) && is_array($post['value'])) {
         $args = $post['value'];
     }
-    $_ENV['WHISK_INPUT'] = json_encode($args);
 
     // run the action
     require __DIR__ . '/src/vendor/autoload.php';

@@ -49,10 +49,10 @@ while ($f = fgets(STDIN)) {
 
     // convert all parameters other than value to environment variables
     foreach ($data as $key => $value) {
-        if ($key == 'value') {
-            $_ENV['WHISK_INPUT'] = $data['value'] ?? [];
-        } else {
-            $_ENV['__OW_' . strtoupper($key)] = $value;
+        if ($key !== 'value') {
+            $envKeyName = '__OW_' . strtoupper($key);
+            $_ENV[$envKeyName] = $value;
+            putenv($envKeyName . '=' . $value);
         }
     }
 

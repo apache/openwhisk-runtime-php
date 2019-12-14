@@ -208,7 +208,6 @@ function run() : array
     if (array_key_exists('value', $post) && is_array($post['value'])) {
         $args = json_encode($post['value']);
     }
-    $env['WHISK_INPUT'] = $args;
 
     // run the action
     list($returnCode, $stdout, $stderr) = runPHP(
