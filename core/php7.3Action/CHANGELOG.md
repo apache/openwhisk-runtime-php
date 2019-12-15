@@ -19,6 +19,8 @@
 ## Apache 1.14.0 (next release)
 Changes:
   - Update version of PHP to 7.3.12
+  - Update guzzlehttp/guzzle to 6.5.0
+  - Update ramsey/uuid to 3.9.1
   - Added PHP extension mongodb
   - Support getenv()
 
