@@ -24,10 +24,15 @@
 
 ## PHP versions
 
-This runtime provides PHP 7.3 & 7.2.
+This runtime provides PHP 7.4, 7.3 & 7.2.
 
 ### Give it a try today
 To use as a docker action
+
+PHP 7.4:
+```
+wsk action update myAction myAction.php --docker openwhisk/action-php-v7.4:latest
+```
 
 PHP 7.3:
 ```
@@ -44,6 +49,11 @@ This works on any deployment of Apache OpenWhisk
 ### To use on deployment that contains the runtime as a kind
 To use as a kind action
 
+PHP 7.4:
+```
+wsk action update myAction myAction.php --kind php:7.4
+```
+
 PHP 7.3:
 ```
 wsk action update myAction myAction.php --kind php:7.3
@@ -56,19 +66,21 @@ wsk action update myAction myAction.php --kind php:7.2
 
 ### Local development
 ```
+./gradlew core:php7.4Action:distDocker
 ./gradlew core:php7.3Action:distDocker
 ./gradlew core:php7.2Action:distDocker
 ```
-This will produce the images `whisk/action-php-v7.3` & `whisk/action-php-v7.2`
+This will produce the images `whisk/action-php-v7.4`, `whisk/action-php-v7.3` & `whisk/action-php-v7.2` respectively.
 
 Build and Push image
 ```
 docker login
+./gradlew core:php7.4Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ./gradlew core:php7.3Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ./gradlew core:php7.2Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
-Deploy OpenWhisk using ansible environment that contains the kinds `php:7.3` & `php:7.2`
+Deploy OpenWhisk using ansible environment that contains the kinds `php:7.4`, `php:7.3` & `php:7.2`
 Assuming you have OpenWhisk already deploy locally and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
@@ -92,7 +104,11 @@ wskdev fresh -t local-php
 
 To use as docker action push to your own dockerhub account
 ```
-docker tag whisk/php7.2Action $user_prefix/action-php-v7.3
+docker tag whisk/php7.4Action $user_prefix/action-php-v7.4
+docker push $user_prefix/action-php-v7.3
+```
+```
+docker tag whisk/php7.3Action $user_prefix/action-php-v7.3
 docker push $user_prefix/action-php-v7.3
 ```
 ```
@@ -102,7 +118,7 @@ docker push $user_prefix/action-php-v7.2
 
 Then create the action using your the image from dockerhub
 ```
-wsk action update myAction myAction.php --docker $user_prefix/action-php-v7.3
+wsk action update myAction myAction.php --docker $user_prefix/action-php-v7.4
 ```
 The `$user_prefix` is usually your dockerhub user id.
 
