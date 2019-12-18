@@ -50,6 +50,11 @@ deploy:
     on:
       branch: master
       repo: apache/openwhisk-runtime-php
+  - provider: script
+    script: "./tools/travis/publish.sh openwhisk 7.4 nightly"
+    on:
+      branch: master
+      repo: apache/openwhisk-runtime-php
 env:
   global:
   - secure: AJZRyRO/ZkStfywAZVN8bk1YmQLHOTD37QdjBsw77CdqnW9Y+a7V3+wZD3W+obQrEhNR9spkKlMh+biE2HFoRwr/AZ3Pl0frzhlyzZXaLUgJMK7wfQzuFVVgjODs4ld2PrJRv5LibFwco9cosDYHe9xlqQ+/Yg/QaWZPK0rBS1UFBxHh1cOcIJ0N80vDXgZbqmH9nuE7W5GvNGzDg9p16w+u48a6UF7UVzf+RU/uR13q7LrAq/FD7dtdiHpamIw4MiGWhW/GZQrwZpzovfGFr365uEVWu+ssQJld+sbeVoN9ED6kOrfYTFg+l7+8cvjhkZ9LUWELK/zVFCu4wYmuhk6utUreBD5rzsfVQmt0Ups7ANIqVS0874CW6WdxO+wPx5Me5k3azXbLgk6mPt4hL0+nlUZ1ycP2rEN/RnL2r8UJAN3vdvL1nXrTTulwNLwS8U3Lc+4yEV+YHQR9c9pYdw3VPx1vNVjEQ34djeoiVxROueBDroZfP3Ft5IazQx4sGPHWfFS1yH5JD58S7YYlz8QEope+Cby1Sj4MUJIjqlT9UgQXq1UydzAWmQPcn81scfITTAWzKHvIXxKrffiVPwkMG67uaUiobd9tDYr+CWpuKXckOSuOi0CwRuGJKyc7lGQvW2zVg7uC56bA9LMD91HYCsRUbNuOox9TXVLjGtM=

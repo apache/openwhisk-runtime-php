@@ -15,24 +15,13 @@
  * limitations under the License.
  */
 
-include 'tests'
+package runtime.actionContainers
 
-include 'core:php7.2Action'
-include 'core:php7.3Action'
-include 'core:php7.4Action'
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
-rootProject.name = 'runtime-php'
+@RunWith(classOf[JUnitRunner])
+class Php74ActionContainerTests extends Php7ActionContainerTests {
 
-gradle.ext.openwhisk = [
-        version: '1.0.0-SNAPSHOT'
-]
-
-gradle.ext.scala = [
-    version: '2.12.7',
-    compileFlags: ['-feature', '-unchecked', '-deprecation', '-Xfatal-warnings', '-Ywarn-unused-import']
-]
-
-gradle.ext.scalafmt = [
-    version: '1.5.0',
-    config: new File(rootProject.projectDir, '.scalafmt.conf')
-]
+  override lazy val phpContainerImageName = "action-php-v7.4"
+}
