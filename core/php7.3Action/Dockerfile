@@ -25,7 +25,7 @@ RUN env CGO_ENABLED=0 go get github.com/apache/openwhisk-runtime-go/main && mv /
 #  && cd src/github.com/apache/incubator-openwhisk-runtime-go/main \
 #  && CGO_ENABLED=0 go build -o /bin/proxy
 
-FROM php:7.3.12-cli-stretch
+FROM php:7.3.13-cli-stretch
 
 # install dependencies
 RUN \
