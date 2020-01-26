@@ -15,17 +15,23 @@
 # limitations under the License.
 #
 
-FROM golang:1.12 as builder
+# build go proxy from source
+FROM golang:1.12 AS builder_source
 RUN env CGO_ENABLED=0 go get github.com/apache/openwhisk-runtime-go/main && mv /go/bin/main /bin/proxy
-#ENV PROXY_SOURCE=https://github.com/apache/openwhisk-runtime-go/archive/golang1.11@1.13.0-incubating.tar.gz
-#RUN curl -L "$PROXY_SOURCE" | tar xzf - \
-#  && mkdir -p src/github.com/apache \
-#  && mv openwhisk-runtime-go-golang1.11-1.13.0-incubating \
-#     src/github.com/apache/incubator-openwhisk-runtime-go \
-#  && cd src/github.com/apache/incubator-openwhisk-runtime-go/main \
-#  && CGO_ENABLED=0 go build -o /bin/proxy
+
+# or build it from a release
+FROM golang:1.12 AS builder_release
+ARG GO_PROXY_RELEASE_VERSION=1.12@1.15.0
+RUN curl -sL \
+  https://github.com/apache/openwhisk-runtime-go/archive/{$GO_PROXY_RELEASE_VERSION}.tar.gz\
+  | tar xzf -\
+  && cd openwhisk-runtime-go-*/main\
+  && GO111MODULE=on go build -o /bin/proxy
 
 FROM php:7.3.13-cli-stretch
+
+# select the builder to use
+ARG GO_PROXY_BUILD_FROM=release
 
 # install dependencies
 RUN \
@@ -71,10 +77,12 @@ RUN mkdir -p /phpAction/composer
 COPY composer.json /phpAction/composer
 RUN cd /phpAction/composer && /usr/bin/composer install --no-plugins --no-scripts --prefer-dist --no-dev -o && rm composer.lock
 
-# install proxy binary alogn with compile and launcher scripts
+# install proxy binary along with compile and launcher scripts
 RUN mkdir -p /phpAction/action
 WORKDIR /phpAction
-COPY --from=builder /bin/proxy /bin/proxy
+COPY --from=builder_source /bin/proxy /bin/proxy_source
+COPY --from=builder_release /bin/proxy /bin/proxy_release
+RUN mv /bin/proxy_${GO_PROXY_BUILD_FROM} /bin/proxy
 ADD compile /bin/compile
 ADD runner.php /bin/runner.php
 ENV OW_COMPILER=/bin/compile
