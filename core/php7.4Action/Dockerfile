@@ -82,8 +82,8 @@ WORKDIR /phpAction
 COPY --from=builder_source /bin/proxy /bin/proxy_source
 COPY --from=builder_release /bin/proxy /bin/proxy_release
 RUN mv /bin/proxy_${GO_PROXY_BUILD_FROM} /bin/proxy
-ADD compile /bin/compile
+ADD compile.php /bin/compile.php
 ADD runner.php /bin/runner.php
-ENV OW_COMPILER=/bin/compile
+ENV OW_COMPILER=/bin/compile.php
 
 ENTRYPOINT [ "/bin/proxy" ]
