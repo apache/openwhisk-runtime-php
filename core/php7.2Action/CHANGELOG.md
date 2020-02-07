@@ -17,12 +17,13 @@
 #
 -->
 
-## Apache 1.14.0 (next release)
+## Apache 1.14.0
 Changes:
   - Update version of PHP to 7.2.25
   - Update guzzlehttp/guzzle to 6.5.0
   - Update ramsey/uuid to 3.9.1
   - Support getenv()
+  - Support for __OW_ACTION_VERSION (openwhisk/4761)
 
 ## Apache 1.13.0-incubating
 Changes:

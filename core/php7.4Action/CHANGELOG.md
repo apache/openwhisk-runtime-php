@@ -16,10 +16,8 @@
 # limitations under the License.
 #
 -->
-## Apache 1.14.0 (next release)
-
+## Apache 1.14.0
 Initial release
-
 - Added: PHP: 7.4.0
 - Added: PHP extensions in addition to the standard ones:
     - bcmath
