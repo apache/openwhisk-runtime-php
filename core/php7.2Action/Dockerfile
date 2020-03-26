@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-FROM php:7.2.28-alpine
+FROM php:7.2.29-alpine
 
 RUN \
     apk update && apk upgrade && \
