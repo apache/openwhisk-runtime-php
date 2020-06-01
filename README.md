@@ -105,7 +105,7 @@ wskdev fresh -t local-php
 To use as docker action push to your own dockerhub account
 ```
 docker tag whisk/php7.4Action $user_prefix/action-php-v7.4
-docker push $user_prefix/action-php-v7.3
+docker push $user_prefix/action-php-v7.4
 ```
 ```
 docker tag whisk/php7.3Action $user_prefix/action-php-v7.3
