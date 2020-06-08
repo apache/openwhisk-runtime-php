@@ -35,8 +35,10 @@ ARG GO_PROXY_BUILD_FROM=release
 
 # install dependencies
 RUN \
-    apt-get -y update && \
-    apt-get -y install \
+    apt-get -y update \
+    # Upgrade installed packages to get latest security fixes if the base image does not contain them already.
+    && apt-get upgrade -y --no-install-recommends \
+    && apt-get -y install \
       libfreetype6-dev \
       libicu-dev \
       libicu63 \
@@ -47,7 +49,9 @@ RUN \
       libzip-dev \
       postgresql-server-dev-11 \
       unzip \
-      zlib1g-dev
+      zlib1g-dev \
+    # Cleanup apt data, we do not need them later on.
+    && rm -rf /var/lib/apt/lists/*
 
 # Install useful PHP extensions
 RUN \
