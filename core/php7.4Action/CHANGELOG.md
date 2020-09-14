@@ -16,6 +16,10 @@
 # limitations under the License.
 #
 -->
+
+## Next release
+ - Update version of PHP to 7.4.10
+
 ## Apache 1.14.0
 Initial release
 - Added: PHP: 7.4.0
