@@ -17,7 +17,7 @@
 #
 -->
 ## Next release
- - Update version of PHP to 7.3.21
+ - Update version of PHP to 7.3.22
 
 ## Apache 1.14.0
 Changes:
