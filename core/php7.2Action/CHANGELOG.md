@@ -17,7 +17,7 @@
 #
 -->
 
-## Next release
+## Apache 1.15.0
  - Update version of PHP to 7.2.33
 
 ## Apache 1.14.0
