@@ -16,6 +16,8 @@
 # limitations under the License.
 #
 -->
+## Next Release
+  - Update version of PHP to 7.4.11
 
 ## Apache 1.15.0
   - Update version of PHP to 7.4.10

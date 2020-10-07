@@ -16,6 +16,8 @@
 # limitations under the License.
 #
 -->
+## Next Release
+ - Update version of PHP to 7.2.34
 
 ## Apache 1.15.0
  - Update version of PHP to 7.2.33
