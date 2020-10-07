@@ -16,6 +16,9 @@
 # limitations under the License.
 #
 -->
+## Next Release
+  - Update version of PHP to 7.3.23
+
 ## Apache 1.15.0
   - Update version of PHP to 7.3.22
   - Use golang 1.15 and openwhisk-runtime-go 1.16.0 to build proxy
