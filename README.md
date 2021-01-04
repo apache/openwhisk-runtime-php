@@ -24,7 +24,7 @@
 
 ## PHP versions
 
-This runtime provides PHP 7.4, 7.3 & 7.2.
+This runtime provides PHP 7.4 and 7.3.
 
 ### Give it a try today
 To use as a docker action
@@ -37,11 +37,6 @@ wsk action update myAction myAction.php --docker openwhisk/action-php-v7.4:lates
 PHP 7.3:
 ```
 wsk action update myAction myAction.php --docker openwhisk/action-php-v7.3:latest
-```
-
-PHP 7.2:
-```
-wsk action update myAction myAction.php --docker openwhisk/action-php-v7.2:latest
 ```
 
 This works on any deployment of Apache OpenWhisk
@@ -59,28 +54,21 @@ PHP 7.3:
 wsk action update myAction myAction.php --kind php:7.3
 ```
 
-PHP 7.2:
-```
-wsk action update myAction myAction.php --kind php:7.2
-```
-
 ### Local development
 ```
 ./gradlew core:php7.4Action:distDocker
 ./gradlew core:php7.3Action:distDocker
-./gradlew core:php7.2Action:distDocker
 ```
-This will produce the images `whisk/action-php-v7.4`, `whisk/action-php-v7.3` & `whisk/action-php-v7.2` respectively.
+This will produce the images `whisk/action-php-v7.4` & `whisk/action-php-v7.3` respectively.
 
 Build and Push image
 ```
 docker login
 ./gradlew core:php7.4Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ./gradlew core:php7.3Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
-./gradlew core:php7.2Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
-Deploy OpenWhisk using ansible environment that contains the kinds `php:7.4`, `php:7.3` & `php:7.2`
+Deploy OpenWhisk using ansible environment that contains the kinds `php:7.4` & `php:7.3`
 Assuming you have OpenWhisk already deploy locally and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
@@ -110,10 +98,6 @@ docker push $user_prefix/action-php-v7.4
 ```
 docker tag whisk/php7.3Action $user_prefix/action-php-v7.3
 docker push $user_prefix/action-php-v7.3
-```
-```
-docker tag whisk/php7.2Action $user_prefix/action-php-v7.2
-docker push $user_prefix/action-php-v7.2
 ```
 
 Then create the action using your the image from dockerhub
