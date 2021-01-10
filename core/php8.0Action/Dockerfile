@@ -33,29 +33,29 @@ FROM php:8.0.1-cli-buster
 # select the builder to use
 ARG GO_PROXY_BUILD_FROM=release
 
-# install dependencies
-RUN \
-    apt-get -y update \
-    # Upgrade installed packages to get latest security fixes if the base image does not contain them already.
-    && apt-get upgrade -y --no-install-recommends \
-    && apt-get -y install \
+# install PHP extensions
+RUN apt-get -y update \
+    && apt-get -y install --no-install-recommends \
+      unzip \
+      libfreetype6 \
+      libicu63 \
+      libjpeg62-turbo \
+      libpng16-16 \
+      libssl1.1 \
+      libxml2 \
+      libzip4 \
+      libpq5 \
+      \
       libfreetype6-dev \
       libicu-dev \
-      libicu63 \
       libjpeg-dev \
       libpng-dev \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
       postgresql-server-dev-11 \
-      unzip \
-      zlib1g-dev \
-    # Cleanup apt data, we do not need them later on.
-    && rm -rf /var/lib/apt/lists/*
-
-# Install useful PHP extensions
-RUN \
-    docker-php-ext-install -j$(nproc) \
+    \
+    && docker-php-ext-install \
       bcmath \
       gd \
       intl \
@@ -64,12 +64,24 @@ RUN \
       pdo_mysql \
       pdo_pgsql \
       soap \
-      zip
-
-# Install mongodb
-RUN mkdir -p /usr/src/php/ext/mongodb \
+      zip \
+    \
+    && mkdir -p /usr/src/php/ext/mongodb \
     && curl -fsSL https://pecl.php.net/get/mongodb-1.9.0RC1 | tar xvz -C "/usr/src/php/ext/mongodb" --strip 1 \
-    && docker-php-ext-install -j$(nproc) mongodb
+    && docker-php-ext-install -j$(nproc) mongodb \
+    \
+    && apt-get purge -y --auto-remove $PHPIZE_DEPS \
+    && apt-get purge -y --auto-remove libclang-common-7-dev clang-7 llvm-7 llvm-7-dev \
+    && apt-get purge -y --auto-remove libfreetype6-dev \
+      libicu-dev \
+      libjpeg-dev \
+      libpng-dev \
+      libssl-dev \
+      libxml2-dev \
+      libzip-dev \
+      postgresql-server-dev-11 \
+    && apt-get autoremove -y \
+    && apt-get clean -y
 
 COPY php.ini /usr/local/etc/php
 
