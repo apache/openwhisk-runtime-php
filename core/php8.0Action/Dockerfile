@@ -81,7 +81,8 @@ RUN apt-get -y update \
       libzip-dev \
       postgresql-server-dev-11 \
     && apt-get autoremove -y \
-    && apt-get clean -y
+    && apt-get clean -y \
+    && rm -rf /usr/src/php
 
 COPY php.ini /usr/local/etc/php
 
