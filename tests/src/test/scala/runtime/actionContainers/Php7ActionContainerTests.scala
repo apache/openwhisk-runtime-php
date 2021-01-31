@@ -454,7 +454,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     val srcs = Seq(Seq("index.php") -> """
                 | <?php
                 | function niam(array $args) {
-                |     return [result => "it works"];
+                |     return ["result" => "it works"];
                 | }
             """.stripMargin)
 
