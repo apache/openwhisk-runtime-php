@@ -16,8 +16,11 @@
 # limitations under the License.
 #
 -->
-## Next Release
-  - Update version of PHP to 7.3.23
+## Apache 1.16.0
+  - Update version of PHP to 7.3.27
+  - Use openwhisk-runtime-go 1.17.0 to build proxy
+  - Update guzzlehttp/guzzle to 6.5.5
+  - Update ramsey/uuid to 3.9.3
 
 ## Apache 1.15.0
   - Update version of PHP to 7.3.22

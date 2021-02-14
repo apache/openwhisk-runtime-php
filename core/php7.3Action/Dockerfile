@@ -28,7 +28,7 @@ RUN curl -sL \
   && cd openwhisk-runtime-go-*/main\
   && GO111MODULE=on go build -o /bin/proxy
 
-FROM php:7.3.23-cli-stretch
+FROM php:7.3.27-cli-stretch
 
 # select the builder to use
 ARG GO_PROXY_BUILD_FROM=release

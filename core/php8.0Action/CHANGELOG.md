@@ -16,9 +16,11 @@
 # limitations under the License.
 #
 -->
-## Next Release
+## Apache 1.16.0
 Initial release
-- Added: PHP: 8.0.1
+
+- Added: PHP: 8.0.2
+- Used openwhisk-runtime-go 1.17.0 to build proxy
 - Added: PHP extensions in addition to the standard ones:
     - bcmath
     - curl
