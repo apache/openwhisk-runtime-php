@@ -117,7 +117,7 @@ docker tag whisk/php7.3Action $user_prefix/action-php-v7.3
 docker push $user_prefix/action-php-v7.3
 ```
 
-Then create the action using your the image from dockerhub
+Then create the action using your image from dockerhub
 ```
 wsk action update myAction myAction.php --docker $user_prefix/action-php-v8.0
 ```
@@ -146,7 +146,7 @@ Using gradle to run some tests
 ```
 Using IntelliJ:
 - Import project as gradle project.
-- Make sure working directory is root of the project/repo
+- Make sure the working directory is root of the project/repo
 - Add the following Java VM properties in ScalaTests Run Configuration, easiest is to change the Defaults for all ScalaTests to use this VM properties
 ```
 -Dhttp.proxyHost=localhost

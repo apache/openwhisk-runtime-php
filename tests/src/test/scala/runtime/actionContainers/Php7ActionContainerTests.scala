@@ -263,7 +263,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     })
   }
 
-  it should "suport returning a stdClass" in {
+  it should "support returning a stdClass" in {
     val (out, err) = withPhp7Container { c =>
       val code = """
                 | <?php
