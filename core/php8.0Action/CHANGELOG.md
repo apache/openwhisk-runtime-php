@@ -16,6 +16,10 @@
 # limitations under the License.
 #
 -->
+
+## Next Release
+  - Update version of PHP to 8.0.8
+
 ## Apache 1.16.0
 Initial release
 
