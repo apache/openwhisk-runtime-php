@@ -17,8 +17,10 @@
 #
 -->
 
-## Next Release
+## Apache 1.17.0
   - Update version of PHP to 7.4.21
+  - Build actionloop from 1.16@1.18.0 (#107)
+  - Resolve akka versions explicitly. (#105, #104)
 
 ## Apache 1.16.0
   - Update version of PHP to 7.4.15
