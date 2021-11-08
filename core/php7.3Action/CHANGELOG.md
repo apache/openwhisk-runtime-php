@@ -17,6 +17,9 @@
 #
 -->
 
+## Next Release
+  - Update version of PHP to 7.3.32
+
 ## Apache 1.17.0
   - Update version of PHP to 7.3.29
   - Build actionloop from 1.16@1.18.0 (#107)
