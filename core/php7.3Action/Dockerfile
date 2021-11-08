@@ -46,13 +46,13 @@ RUN \
     && apt-get -y install \
       libfreetype6-dev \
       libicu-dev \
-      libicu57 \
+      libicu63 \
       libjpeg-dev \
       libpng-dev \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
-      postgresql-server-dev-9.6 \
+      ppostgresql-server-dev-11 \
       unzip \
       zlib1g-dev \
     # Cleanup apt data, we do not need them later on.
