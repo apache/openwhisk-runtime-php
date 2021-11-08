@@ -19,6 +19,7 @@
 
 ## Next Release
   - Update version of PHP to 7.3.32
+  - Update to Debian "buster"
 
 ## Apache 1.17.0
   - Update version of PHP to 7.3.29
