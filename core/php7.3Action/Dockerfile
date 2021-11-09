@@ -52,7 +52,7 @@ RUN \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
-      ppostgresql-server-dev-11 \
+      postgresql-server-dev-11 \
       unzip \
       zlib1g-dev \
     # Cleanup apt data, we do not need them later on.
