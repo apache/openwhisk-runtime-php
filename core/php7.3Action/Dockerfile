@@ -33,7 +33,7 @@ RUN curl -sL \
   && cd openwhisk-runtime-go-*/main\
   && GO111MODULE=on go build -o /bin/proxy
 
-FROM php:7.3.29-cli-stretch
+FROM php:7.3.32-cli-buster
 
 # select the builder to use
 ARG GO_PROXY_BUILD_FROM=release
@@ -46,13 +46,13 @@ RUN \
     && apt-get -y install \
       libfreetype6-dev \
       libicu-dev \
-      libicu57 \
+      libicu63 \
       libjpeg-dev \
       libpng-dev \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
-      postgresql-server-dev-9.6 \
+      postgresql-server-dev-11 \
       unzip \
       zlib1g-dev \
     # Cleanup apt data, we do not need them later on.
