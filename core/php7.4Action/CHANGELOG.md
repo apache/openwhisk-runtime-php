@@ -18,7 +18,7 @@
 -->
 
 ## Next Release
-  - Update version of PHP to 7.4.25
+  - Update version of PHP to 7.4.62
 
 ## Apache 1.17.0
   - Update version of PHP to 7.4.21

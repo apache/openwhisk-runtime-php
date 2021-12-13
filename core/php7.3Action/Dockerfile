@@ -33,7 +33,7 @@ RUN curl -sL \
   && cd openwhisk-runtime-go-*/main\
   && GO111MODULE=on go build -o /bin/proxy
 
-FROM php:7.3.32-cli-buster
+FROM php:7.3.33-cli-buster
 
 # select the builder to use
 ARG GO_PROXY_BUILD_FROM=release
