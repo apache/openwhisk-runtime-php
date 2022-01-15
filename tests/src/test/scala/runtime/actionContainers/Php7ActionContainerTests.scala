@@ -46,10 +46,10 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   override val testNotReturningJson = {
     TestConfig(
       """
-       |<?php
-       |function main(array $args) {
-       |    return "not a json object";
-       |}
+        |<?php
+        |function main(array $args) {
+        |    return "not a json object";
+        |}
      """.stripMargin,
       enforceEmptyOutputStream = enforceEmptyOutputStream,
       enforceEmptyErrorStream = false)
@@ -80,23 +80,23 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
   override val testEcho = {
     TestConfig("""
-                 |<?php
-                 |function main(array $args) : array {
-                 |    echo 'hello stdout';
-                 |    error_log('hello stderr');
-                 |    return $args;
-                 |}
+        |<?php
+        |function main(array $args) : array {
+        |    echo 'hello stdout';
+        |    error_log('hello stderr');
+        |    return $args;
+        |}
                """.stripMargin)
   }
 
   override val testUnicode = {
     TestConfig("""
-         |<?php
-         |function main(array $args) : array {
-         |    $str = $args['delimiter'] . " ☃ " . $args['delimiter'];
-         |    echo $str . "\n";
-         |    return  ["winter" => $str];
-         |}
+        |<?php
+        |function main(array $args) : array {
+        |    $str = $args['delimiter'] . " ☃ " . $args['delimiter'];
+        |    echo $str . "\n";
+        |    return  ["winter" => $str];
+        |}
          """.stripMargin.trim)
   }
 
@@ -133,11 +133,12 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
   it should "return some error on action error" in {
     val (out, err) = withPhp7Container { c =>
-      val code = """
-                |<?php
-                | function main(array $args) : array {
-                |     throw new Exception ("nooooo");
-                | }
+      val code =
+        """
+          |<?php
+          | function main(array $args) : array {
+          |     throw new Exception ("nooooo");
+          | }
             """.stripMargin
 
       val (initCode, _) = c.init(initPayload(code))
@@ -152,10 +153,12 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     }
 
     // Somewhere, the logs should be the error text
-    checkStreams(out, err, {
-      case (o, e) =>
+    checkStreams(
+      out,
+      err,
+      { case (o, e) =>
         (o + e).toLowerCase should include("nooooo")
-    })
+      })
 
   }
 
@@ -199,29 +202,31 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
       val (runCode, out) = c.run(runPayload(JsObject.empty, Some(props.drop(1).toMap.toJson.asJsObject)))
       runCode should be(200)
       out shouldBe defined
-      props.map {
-        case (k, v) =>
-          withClue(k) {
-            out.get.fields(k) shouldBe JsString(v)
-          }
+      props.map { case (k, v) =>
+        withClue(k) {
+          out.get.fields(k) shouldBe JsString(v)
+        }
 
       }
     }
 
-    checkStreams(out, err, {
-      case (o, e) =>
+    checkStreams(
+      out,
+      err,
+      { case (o, e) =>
         if (config.enforceEmptyOutputStream) o shouldBe empty
         if (config.enforceEmptyErrorStream) e shouldBe empty
-    })
+      })
   }
 
   it should "support application errors" in {
     withPhp7Container { c =>
-      val code = """
-                |<?php
-                | function main(array $args) : array {
-                |     return [ "error" => "sorry" ];
-                | }
+      val code =
+        """
+          |<?php
+          | function main(array $args) : array {
+          |     return [ "error" => "sorry" ];
+          | }
             """.stripMargin;
 
       val (initCode, error) = c.init(initPayload(code))
@@ -238,12 +243,13 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
   it should "fail gracefully when an action has a fatal error" in {
     val (out, err) = withPhp7Container { c =>
-      val code = """
-                | <?php
-                | function main(array $args) : array {
-                |     eval("class Error {};");
-                |     return [ "hello" => "world" ];
-                | }
+      val code =
+        """
+          | <?php
+          | function main(array $args) : array {
+          |     eval("class Error {};");
+          |     return [ "hello" => "world" ];
+          | }
             """.stripMargin;
 
       val (initCode, _) = c.init(initPayload(code))
@@ -257,21 +263,24 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     }
 
     // Somewhere, the logs should be the error text
-    checkStreams(out, err, {
-      case (o, e) =>
+    checkStreams(
+      out,
+      err,
+      { case (o, e) =>
         (o + e).toLowerCase should include("fatal error")
-    })
+      })
   }
 
   it should "support returning a stdClass" in {
     val (out, err) = withPhp7Container { c =>
-      val code = """
-                | <?php
-                | function main($params) {
-                |     $obj = new stdClass();
-                |     $obj->hello = 'world';
-                |     return $obj;
-                | }
+      val code =
+        """
+          | <?php
+          | function main($params) {
+          |     $obj = new stdClass();
+          |     $obj->hello = 'world';
+          |     return $obj;
+          | }
             """.stripMargin
 
       val (initCode, _) = c.init(initPayload(code))
@@ -288,13 +297,14 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
   it should "support returning an object with a getArrayCopy() method" in {
     val (out, err) = withPhp7Container { c =>
-      val code = """
-                | <?php
-                | function main($params) {
-                |     $obj = new ArrayObject();
-                |     $obj['hello'] = 'world';
-                |     return $obj;
-                | }
+      val code =
+        """
+          | <?php
+          | function main($params) {
+          |     $obj = new ArrayObject();
+          |     $obj['hello'] = 'world';
+          |     return $obj;
+          | }
             """.stripMargin
 
       val (initCode, _) = c.init(initPayload(code))
@@ -311,17 +321,18 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
   it should "support the documentation examples (1)" in {
     val (out, err) = withPhp7Container { c =>
-      val code = """
-                | <?php
-                | function main($params) {
-                |     if ($params['payload'] == 0) {
-                |         return;
-                |     } else if ($params['payload'] == 1) {
-                |         return ['payload' => 'Hello, World!'] ;        // indicates normal completion
-                |     } else if ($params['payload'] == 2) {
-                |         return ['error' => 'payload must be 0 or 1'];  // indicates abnormal completion
-                |     }
-                | }
+      val code =
+        """
+          | <?php
+          | function main($params) {
+          |     if ($params['payload'] == 0) {
+          |         return;
+          |     } else if ($params['payload'] == 1) {
+          |         return ['payload' => 'Hello, World!'] ;        // indicates normal completion
+          |     } else if ($params['payload'] == 2) {
+          |         return ['error' => 'payload must be 0 or 1'];  // indicates abnormal completion
+          |     }
+          | }
             """.stripMargin
 
       c.init(initPayload(code))._1 should be(200)
@@ -344,14 +355,15 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   it should "have Guzzle and Uuid packages available" in {
     // GIVEN that it should "error when requiring a non-existent package" (see test above for this)
     val (out, err) = withPhp7Container { c =>
-      val code = """
-                | <?php
-                | use Ramsey\Uuid\Uuid;
-                | use GuzzleHttp\Client;
-                | function main(array $args) {
-                |     Uuid::uuid4();
-                |     new Client();
-                | }
+      val code =
+        """
+          | <?php
+          | use Ramsey\Uuid\Uuid;
+          | use GuzzleHttp\Client;
+          | function main(array $args) {
+          |     Uuid::uuid4();
+          |     new Client();
+          | }
             """.stripMargin
 
       val (initCode, _) = c.init(initPayload(code))
@@ -370,14 +382,16 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     val thought = " I took the one less traveled by, and that has made all the difference."
     val assignment = "    $x = \"" + thought + "\";\n"
 
-    val code = """
-            | <?php
-            | function main(array $args) {
-            |     $x = "hello";
-            """.stripMargin + (assignment * 7000) + """
-            |     $x = "world";
-            |     return [ "message" => $x ];
-            | }
+    val code =
+      """
+        | <?php
+        | function main(array $args) {
+        |     $x = "hello";
+            """.stripMargin + (assignment * 7000) +
+        """
+          |     $x = "world";
+          |     return [ "message" => $x ];
+          | }
             """.stripMargin
 
     // Lest someone should make it too easy.
@@ -394,23 +408,25 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     }
   }
 
-  val exampleOutputDotPhp: String = """
-        | <?php
-        | function output($data) {
-        |     return ['result' => $data];
-        | }
+  val exampleOutputDotPhp: String =
+    """
+      | <?php
+      | function output($data) {
+      |     return ['result' => $data];
+      | }
     """.stripMargin
 
   it should "support zip-encoded packages" in {
     val srcs = Seq(
       Seq("output.php") -> exampleOutputDotPhp,
-      Seq("index.php") -> """
-                | <?php
-                | require __DIR__ . '/output.php';
-                | function main(array $args) {
-                |     $name = $args['name'] ?? 'stranger';
-                |     return output($name);
-                | }
+      Seq("index.php") ->
+        """
+          | <?php
+          | require __DIR__ . '/output.php';
+          | function main(array $args) {
+          |     $name = $args['name'] ?? 'stranger';
+          |     return output($name);
+          | }
             """.stripMargin)
 
     val code = ZipBuilder.mkBase64Zip(srcs)
@@ -429,12 +445,13 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   it should "support replacing vendor in zip-encoded packages " in {
     val srcs = Seq(
       Seq("vendor/autoload.php") -> exampleOutputDotPhp,
-      Seq("index.php") -> """
-                | <?php
-                | function main(array $args) {
-                |     $name = $args['name'] ?? 'stranger';
-                |     return output($name);
-                | }
+      Seq("index.php") ->
+        """
+          | <?php
+          | function main(array $args) {
+          |     $name = $args['name'] ?? 'stranger';
+          |     return output($name);
+          | }
             """.stripMargin)
 
     val code = ZipBuilder.mkBase64Zip(srcs)
@@ -451,11 +468,13 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   it should "support zipped actions using non-default entry point" in {
-    val srcs = Seq(Seq("index.php") -> """
-                | <?php
-                | function niam(array $args) {
-                |     return ["result" => "it works"];
-                | }
+    val srcs = Seq(
+      Seq("index.php") ->
+        """
+        | <?php
+        | function niam(array $args) {
+        |     return ["result" => "it works"];
+        | }
             """.stripMargin)
 
     val code = ZipBuilder.mkBase64Zip(srcs)
