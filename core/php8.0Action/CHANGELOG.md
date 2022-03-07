@@ -18,7 +18,7 @@
 -->
 
 ## Next Release
-- Update version of PHP to 8.0.13
+  - Use php:8.0-cli-buster image to always pull latest patch version
 
 ## Apache 1.17.0
   - Update version of PHP to 8.0.8
