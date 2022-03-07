@@ -18,7 +18,7 @@
 -->
 
 ## Next Release
-  - Update version of PHP to 7.4.62
+  - Use php:7.4-cli-buster image to always pull latest patch version
 
 ## Apache 1.17.0
   - Update version of PHP to 7.4.21
