@@ -50,7 +50,7 @@ RUN apt-get -y update \
       libxml2 \
       libzip4 \
       libpq5 \
-      \
+      zip \
       libfreetype6-dev \
       libicu-dev \
       libjpeg-dev \
