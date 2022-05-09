@@ -42,11 +42,6 @@ deploy:
       all_branches: true
       repo: apache/openwhisk-runtime-php
   - provider: script
-    script: "./tools/travis/publish.sh openwhisk 7.3 nightly"
-    on:
-      branch: master
-      repo: apache/openwhisk-runtime-php
-  - provider: script
     script: "./tools/travis/publish.sh openwhisk 7.4 nightly"
     on:
       branch: master
