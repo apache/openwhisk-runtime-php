@@ -38,10 +38,6 @@ TERM=dumb ./gradlew install
 echo "openwhisk.home=$WHISKDIR" > whisk.properties
 echo "vcap.services.file=" >> whisk.properties
 
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-docker version
-
 # Build runtime
 cd $ROOTDIR
 TERM=dumb ./gradlew distDocker
