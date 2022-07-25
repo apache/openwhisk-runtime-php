@@ -153,12 +153,10 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     }
 
     // Somewhere, the logs should be the error text
-    checkStreams(
-      out,
-      err,
-      { case (o, e) =>
+    checkStreams(out, err, {
+      case (o, e) =>
         (o + e).toLowerCase should include("nooooo")
-      })
+    })
 
   }
 
@@ -202,21 +200,20 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
       val (runCode, out) = c.run(runPayload(JsObject.empty, Some(props.drop(1).toMap.toJson.asJsObject)))
       runCode should be(200)
       out shouldBe defined
-      props.map { case (k, v) =>
-        withClue(k) {
-          out.get.fields(k) shouldBe JsString(v)
-        }
+      props.map {
+        case (k, v) =>
+          withClue(k) {
+            out.get.fields(k) shouldBe JsString(v)
+          }
 
       }
     }
 
-    checkStreams(
-      out,
-      err,
-      { case (o, e) =>
+    checkStreams(out, err, {
+      case (o, e) =>
         if (config.enforceEmptyOutputStream) o shouldBe empty
         if (config.enforceEmptyErrorStream) e shouldBe empty
-      })
+    })
   }
 
   it should "support application errors" in {
@@ -263,12 +260,10 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     }
 
     // Somewhere, the logs should be the error text
-    checkStreams(
-      out,
-      err,
-      { case (o, e) =>
+    checkStreams(out, err, {
+      case (o, e) =>
         (o + e).toLowerCase should include("fatal error")
-      })
+    })
   }
 
   it should "support returning a stdClass" in {
@@ -484,6 +479,27 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
       val (runCode, runRes) = c.run(runPayload(JsObject()))
       runRes.get.fields.get("result") shouldBe Some(JsString("it works"))
+    }
+  }
+
+  it should "support array result" in {
+    val srcs = Seq(Seq("index.php") -> """
+                |<?php
+                |function main(array $args) : array
+                |{
+                |    $result=array("a","b","c");
+                |    return $result;
+                |}
+             """.stripMargin)
+
+    val code = ZipBuilder.mkBase64Zip(srcs)
+
+    withPhp7Container { c =>
+      c.init(initPayload(code))._1 should be(200)
+
+      val (runCode, runRes) = c.run(JsObject())
+      runCode should be(200)
+      runRes shouldBe Some(JsObject("0" -> JsString("a"), "1" -> JsString("b"), "2" -> JsString("c")))
     }
   }
 }
