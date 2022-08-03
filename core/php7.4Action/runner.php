@@ -72,7 +72,7 @@ while ($f = fgets(STDIN)) {
         if (!is_array($result)) {
             file_put_contents('php://stderr', 'Result must be an array but has type "'
                 . gettype($result) . '": ' . $result);
-            file_put_contents('php://stdout', 'The action did not return a dictionary.');
+            file_put_contents('php://stdout', 'The action did not return a dictionary or array.');
             $result = (string)$result;
         } else {
             $result = json_encode((object)$result);
