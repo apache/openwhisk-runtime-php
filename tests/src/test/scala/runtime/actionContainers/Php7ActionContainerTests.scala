@@ -153,10 +153,12 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     }
 
     // Somewhere, the logs should be the error text
-    checkStreams(out, err, {
-      case (o, e) =>
+    checkStreams(
+      out,
+      err,
+      { case (o, e) =>
         (o + e).toLowerCase should include("nooooo")
-    })
+      })
 
   }
 
@@ -200,20 +202,21 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
       val (runCode, out) = c.run(runPayload(JsObject.empty, Some(props.drop(1).toMap.toJson.asJsObject)))
       runCode should be(200)
       out shouldBe defined
-      props.map {
-        case (k, v) =>
-          withClue(k) {
-            out.get.fields(k) shouldBe JsString(v)
-          }
+      props.map { case (k, v) =>
+        withClue(k) {
+          out.get.fields(k) shouldBe JsString(v)
+        }
 
       }
     }
 
-    checkStreams(out, err, {
-      case (o, e) =>
+    checkStreams(
+      out,
+      err,
+      { case (o, e) =>
         if (config.enforceEmptyOutputStream) o shouldBe empty
         if (config.enforceEmptyErrorStream) e shouldBe empty
-    })
+      })
   }
 
   it should "support application errors" in {
@@ -260,10 +263,12 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     }
 
     // Somewhere, the logs should be the error text
-    checkStreams(out, err, {
-      case (o, e) =>
+    checkStreams(
+      out,
+      err,
+      { case (o, e) =>
         (o + e).toLowerCase should include("fatal error")
-    })
+      })
   }
 
   it should "support returning a stdClass" in {
@@ -483,14 +488,16 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   it should "support return array result" in {
-    val srcs = Seq(Seq("index.php") -> """
-                |<?php
-                |function main(array $args) : array
-                |{
-                |    $result=array("a","b");
-                |    return $result;
-                |}
-             """.stripMargin)
+    val srcs = Seq(
+      Seq("index.php") ->
+        """
+        | <?php
+        | function main(array $args) : array
+        | {
+        |     $result=array("a","b");
+        |     return $result;
+        | }
+            """.stripMargin)
 
     val code = ZipBuilder.mkBase64Zip(srcs)
 
@@ -504,13 +511,15 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   it should "support array as input param" in {
-    val srcs = Seq(Seq("index.php") -> """
-                |<?php
-                |function main(array $args) : array
-                |{
-                |    return $args;
-                |}
-             """.stripMargin)
+    val srcs = Seq(
+      Seq("index.php") ->
+        """
+        | <?php
+        | function main(array $args) : array
+        | {
+        |     return $args;
+        | }
+            """.stripMargin)
 
     val code = ZipBuilder.mkBase64Zip(srcs)
 
