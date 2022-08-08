@@ -482,12 +482,12 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     }
   }
 
-  it should "support array result" in {
+  it should "support return array result" in {
     val srcs = Seq(Seq("index.php") -> """
                 |<?php
                 |function main(array $args) : array
                 |{
-                |    $result=array("a","b","c");
+                |    $result=array("a","b");
                 |    return $result;
                 |}
              """.stripMargin)
@@ -497,9 +497,29 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     withPhp7Container { c =>
       c.init(initPayload(code))._1 should be(200)
 
-      val (runCode, runRes) = c.run(JsObject())
+      val (runCode, runRes) = c.run(runPayload(JsObject()))
       runCode should be(200)
-      runRes shouldBe Some(JsObject("0" -> JsString("a"), "1" -> JsString("b"), "2" -> JsString("c")))
+      runRes shouldBe Some(JsObject("0" -> JsString("a"), "1" -> JsString("b")))
+    }
+  }
+
+  it should "support array as input param" in {
+    val srcs = Seq(Seq("index.php") -> """
+                |<?php
+                |function main(array $args) : array
+                |{
+                |    return $args;
+                |}
+             """.stripMargin)
+
+    val code = ZipBuilder.mkBase64Zip(srcs)
+
+    withPhp7Container { c =>
+      c.init(initPayload(code))._1 should be(200)
+
+      val (runCode, runRes) = c.run(runPayload(JsArray(JsString("a"), JsString("b"))))
+      runCode should be(200)
+      runRes shouldBe Some(JsObject("0" -> JsString("a"), "1" -> JsString("b")))
     }
   }
 }
