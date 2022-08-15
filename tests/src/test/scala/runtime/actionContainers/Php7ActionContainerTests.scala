@@ -486,4 +486,49 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
       runRes.get.fields.get("result") shouldBe Some(JsString("it works"))
     }
   }
+
+  it should "support return array result" in {
+    val srcs = Seq(
+      Seq("index.php") ->
+        """
+        | <?php
+        | function main(array $args) : array
+        | {
+        |     $result=array("a","b");
+        |     return $result;
+        | }
+            """.stripMargin)
+
+    val code = ZipBuilder.mkBase64Zip(srcs)
+
+    withPhp7Container { c =>
+      c.init(initPayload(code))._1 should be(200)
+
+      val (runCode, runRes) = c.run(runPayload(JsObject()))
+      runCode should be(200)
+      runRes shouldBe Some(JsObject("0" -> JsString("a"), "1" -> JsString("b")))
+    }
+  }
+
+  it should "support array as input param" in {
+    val srcs = Seq(
+      Seq("index.php") ->
+        """
+        | <?php
+        | function main(array $args) : array
+        | {
+        |     return $args;
+        | }
+            """.stripMargin)
+
+    val code = ZipBuilder.mkBase64Zip(srcs)
+
+    withPhp7Container { c =>
+      c.init(initPayload(code))._1 should be(200)
+
+      val (runCode, runRes) = c.run(runPayload(JsArray(JsString("a"), JsString("b"))))
+      runCode should be(200)
+      runRes shouldBe Some(JsObject("0" -> JsString("a"), "1" -> JsString("b")))
+    }
+  }
 }
