@@ -43,7 +43,7 @@ RUN apt-get -y update \
     && apt-get -y install --no-install-recommends \
       unzip \
       libfreetype6 \
-      libicu63 \
+      libicu67 \
       libjpeg62-turbo \
       libpng16-16 \
       libssl1.1 \
@@ -58,7 +58,7 @@ RUN apt-get -y update \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
-      postgresql-server-dev-11 \
+      postgresql-server-dev-13 \
     \
     && docker-php-ext-install \
       bcmath \
