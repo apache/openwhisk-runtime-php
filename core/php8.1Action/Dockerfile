@@ -72,11 +72,11 @@ RUN apt-get -y update \
       zip \
     \
     && mkdir -p /usr/src/php/ext/mongodb \
-    && curl -fsSL https://pecl.php.net/get/mongodb-1.9.0RC1 | tar xvz -C "/usr/src/php/ext/mongodb" --strip 1 \
+    && curl -fsSL https://pecl.php.net/get/mongodb-1.14.0 | tar xvz -C "/usr/src/php/ext/mongodb" --strip 1 \
     && docker-php-ext-install -j$(nproc) mongodb \
     \
     && apt-get purge -y --auto-remove $PHPIZE_DEPS \
-    && apt-get purge -y --auto-remove libclang-common-7-dev clang-7 llvm-7 llvm-7-dev \
+    # && apt-get purge -y --auto-remove libclang-common-7-dev clang-7 llvm-7 llvm-7-dev \
     && apt-get purge -y --auto-remove libfreetype6-dev \
       libicu-dev \
       libjpeg-dev \
@@ -84,7 +84,7 @@ RUN apt-get -y update \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
-      postgresql-server-dev-11 \
+      postgresql-server-dev-13 \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /usr/src/php
