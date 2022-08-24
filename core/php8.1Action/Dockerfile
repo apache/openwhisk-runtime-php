@@ -76,7 +76,6 @@ RUN apt-get -y update \
     && docker-php-ext-install -j$(nproc) mongodb \
     \
     && apt-get purge -y --auto-remove $PHPIZE_DEPS \
-    # && apt-get purge -y --auto-remove libclang-common-7-dev clang-7 llvm-7 llvm-7-dev \
     && apt-get purge -y --auto-remove libfreetype6-dev \
       libicu-dev \
       libjpeg-dev \

@@ -75,6 +75,7 @@ while ($f = fgets(STDIN)) {
             file_put_contents('php://stdout', 'The action did not return a dictionary or array.');
             $result = (string)$result;
         } else {
+            // cast result to an object for json_encode to ensure that an empty array becomes "{}
             $result = json_encode((object)$result);
         }
     } catch (Throwable $e) {
@@ -86,6 +87,6 @@ while ($f = fgets(STDIN)) {
     file_put_contents('php://stderr', "\n");
     file_put_contents('php://stdout', "\n");
 
-    // cast result to an object for json_encode to ensure that an empty array becomes "{}" & send to fd/3
+    // send result to fd/3
     fwrite($fd3, $result . "\n");
 }
