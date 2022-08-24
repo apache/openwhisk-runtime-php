@@ -24,10 +24,15 @@
 
 ## PHP versions
 
-This runtime provides PHP 8.0 and 7.4.
+This runtime provides PHP 8.1, 8.0 and 7.4.
 
 ### Give it a try today
 To use as a docker action
+
+PHP 8.1:
+```
+wsk action update myAction myAction.php --docker openwhisk/action-php-v8.1:latest
+```
 
 PHP 8.0:
 ```
@@ -44,6 +49,11 @@ This works on any deployment of Apache OpenWhisk
 ### To use on deployment that contains the runtime as a kind
 To use as a kind action
 
+PHP 8.1:
+```
+wsk action update myAction myAction.php --kind php:8.1
+```
+
 PHP 8.0:
 ```
 wsk action update myAction myAction.php --kind php:8.0
@@ -57,10 +67,11 @@ wsk action update myAction myAction.php --kind php:7.4
 ### Local development
 
 ```
+./gradlew core:php8.1Action:distDocker
 ./gradlew core:php8.0Action:distDocker
 ./gradlew core:php7.4Action:distDocker
 ```
-This will produce the images `whisk/action-php-v8.0` and `whisk/action-php-v7.4` respectively.
+This will produce the images `whisk/action-php-v8.1`, `whisk/action-php-v8.0` and `whisk/action-php-v7.4` respectively.
 
 Build and Push image
 ```
@@ -69,7 +80,7 @@ docker login
 ./gradlew core:php7.4Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
-Deploy OpenWhisk using ansible environment that contains the kinds `php:8.0` and `php:7.4`
+Deploy OpenWhisk using ansible environment that contains the kinds `php:8.1`, `php:8.0` and `php:7.4`
 Assuming you have OpenWhisk already deploy locally and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
@@ -92,6 +103,10 @@ wskdev fresh -t local-php
 ```
 
 To use as docker action push to your own dockerhub account
+```
+docker tag whisk/php8.1Action $user_prefix/action-php-v8.1
+docker push $user_prefix/action-php-v8.1
+```
 ```
 docker tag whisk/php8.0Action $user_prefix/action-php-v8.0
 docker push $user_prefix/action-php-v8.0
