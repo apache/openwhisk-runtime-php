@@ -17,6 +17,9 @@
 #
 -->
 
+## Migrating from PHP 7 to PHP 8
+PHP 8 as new features and some incompatiblities. See [migration guide](https://www.php.net/manual/en/migration80.php) for more information.
+
 ## Next Release
 Initial release
 
