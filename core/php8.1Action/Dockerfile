@@ -40,6 +40,8 @@ ARG GO_PROXY_BUILD_FROM=release
 
 # install PHP extensions
 RUN apt-get -y update \
+    # Upgrade installed packages to get latest security fixes if the base image does not contain them already.
+    && apt-get upgrade -y --no-install-recommends \
     && apt-get -y install --no-install-recommends \
       unzip \
       libfreetype6 \
