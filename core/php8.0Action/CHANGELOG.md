@@ -19,7 +19,7 @@
 
 ## Next Release
   - Use php:8.0-cli-buster image to always pull latest patch version
-  - Golang Action loop updatetd to golang 1.18
+  - Golang Action loop updatetd to golang 1.20
 
 ## Apache 1.17.0
   - Update version of PHP to 8.0.8
