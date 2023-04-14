@@ -21,9 +21,9 @@
 PHP 8 as new features and some incompatiblities. See [migration guide](https://www.php.net/manual/en/migration80.php) for more information.
 
 ## Next Release
-- Used openwhisk-runtime-go 1.20.0 to build proxy
+- Used openwhisk-runtime-go 1.22.0 to build proxy
 
-Initial release
+## Initial release
 
 - Added: PHP: 8.1.9
 - Used openwhisk-runtime-go 1.18.0 to build proxy
