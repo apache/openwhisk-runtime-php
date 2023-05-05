@@ -17,9 +17,10 @@
 #
 -->
 
-## Next Release
+## Apache 1.18.0
   - Use php:8.0-cli-buster image to always pull latest patch version
   - Golang Action loop updatetd to golang 1.20
+  - Support array result include sequence action (#120)
 
 ## Apache 1.17.0
   - Update version of PHP to 8.0.8
