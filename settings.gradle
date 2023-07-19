@@ -17,7 +17,6 @@
 
 include 'tests'
 
-include 'core:php7.4Action'
 include 'core:php8.0Action'
 include 'core:php8.1Action'
 
