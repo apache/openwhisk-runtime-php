@@ -15,29 +15,5 @@
  * limitations under the License.
  */
 
-include 'tests'
-
-include 'core:php8.0Action'
-include 'core:php8.1Action'
-include 'core:php8.2Action'
-
-rootProject.name = 'runtime-php'
-
-gradle.ext.openwhisk = [
-        version: '1.0.1-SNAPSHOT'
-]
-
-gradle.ext.scala = [
-    version: '2.12.7',
-    depVersion  : '2.12',
-    compileFlags: ['-feature', '-unchecked', '-deprecation', '-Xfatal-warnings', '-Ywarn-unused-import']
-]
-
-gradle.ext.scalafmt = [
-    version: scalamftVersion,
-    config: new File(rootProject.projectDir, '.scalafmt.conf')
-]
-
-gradle.ext.akka = [version : '2.6.12']
-gradle.ext.akka_http = [version : '10.2.4']
-
+ext.dockerImageName = 'action-php-v8.2'
+apply from: '../../gradle/docker.gradle'
