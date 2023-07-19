@@ -88,8 +88,6 @@ jobs:
         working-directory: runtime
         run: |
           SHORT_COMMIT=$(git rev-parse --short "$GITHUB_SHA")
-          ./gradlew :core:php7.4Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=nightly
-          ./gradlew :core:php7.4Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$SHORT_COMMIT
           ./gradlew :core:php8.0Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=nightly
           ./gradlew :core:php8.0Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$SHORT_COMMIT
           ./gradlew :core:php8.1Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=nightly
