@@ -71,7 +71,7 @@ wsk action update myAction myAction.php --kind php:8.0
 ./gradlew core:php8.1Action:distDocker
 ./gradlew core:php8.0Action:distDocker
 ```
-This will produce the images `whisk/action-php-v8.1` and `whisk/action-php-v8.1`, `whisk/action-php-v8.0` respectively.
+This will produce the images `whisk/action-php-v8.2` and `whisk/action-php-v8.1`, `whisk/action-php-v8.0` respectively.
 
 Build and Push image
 ```

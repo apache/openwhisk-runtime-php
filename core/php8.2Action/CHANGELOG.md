@@ -34,5 +34,5 @@
     - zip
     - mongo
 - Added: Composer packages:
-    - [guzzlehttp/guzzle](https://packagist.org/packages/guzzlehttp/guzzle): 7.4.5
-    - [ramsey/uuid](https://packagist.org/packages/ramsey/uuid): 4.4.0
+    - [guzzlehttp/guzzle](https://packagist.org/packages/guzzlehttp/guzzle): 7.7.0
+    - [ramsey/uuid](https://packagist.org/packages/ramsey/uuid): 4.7.4
