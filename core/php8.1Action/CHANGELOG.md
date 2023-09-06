@@ -17,6 +17,9 @@
 #
 -->
 
+## Apache 1.19.0
+  - No change
+
 ## Apache 1.18.0
 Initial release
 

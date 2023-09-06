@@ -17,6 +17,9 @@
 #
 -->
 
+## Apache 1.19.0
+  - No change
+
 ## Apache 1.18.0
   - Use php:8.0-cli-buster image to always pull latest patch version
   - Golang Action loop updatetd to golang 1.20
