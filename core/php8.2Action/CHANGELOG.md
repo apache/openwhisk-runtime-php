@@ -17,7 +17,9 @@
 #
 -->
 
-## Initial release
+## Apache 1.19.0
+
+- Initial release
 
 - Added: PHP: 8.2.8
 - Added: PHP extensions in addition to the standard ones:
