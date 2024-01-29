@@ -28,6 +28,11 @@ This runtime provides PHP 8.2, 8.1 and 8.0
 ### Give it a try today
 To use as a docker action
 
+PHP 8.3:
+```
+wsk action update myAction myAction.php --docker openwhisk/action-php-v8.3:latest
+```
+
 PHP 8.2:
 ```
 wsk action update myAction myAction.php --docker openwhisk/action-php-v8.2:latest
