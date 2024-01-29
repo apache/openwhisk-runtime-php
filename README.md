@@ -23,7 +23,7 @@
 
 ## PHP versions
 
-This runtime provides PHP 8.2, 8.1 and 8.0
+This runtime provides PHP 8.3, 8.2, 8.1 and 8.0
 
 ### Give it a try today
 To use as a docker action
@@ -53,6 +53,11 @@ This works on any deployment of Apache OpenWhisk
 ### To use on deployment that contains the runtime as a kind
 To use as a kind action
 
+PHP 8.3:
+```
+wsk action update myAction myAction.php --kind php:8.3
+```
+
 PHP 8.2:
 ```
 wsk action update myAction myAction.php --kind php:8.2
@@ -72,15 +77,17 @@ wsk action update myAction myAction.php --kind php:8.0
 ### Local development
 
 ```
+./gradlew core:php8.3Action:distDocker
 ./gradlew core:php8.2Action:distDocker
 ./gradlew core:php8.1Action:distDocker
 ./gradlew core:php8.0Action:distDocker
 ```
-This will produce the images `whisk/action-php-v8.2` and `whisk/action-php-v8.1`, `whisk/action-php-v8.0` respectively.
+This will produce the images `whisk/action-php-v8.3`, `whisk/action-php-v8.2`, `whisk/action-php-v8.1` and `whisk/action-php-v8.0` respectively.
 
 Build and Push image
 ```
 docker login
+./gradlew core:php8.3Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ./gradlew core:php8.2Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ./gradlew core:php8.1Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ./gradlew core:php8.0Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
@@ -110,6 +117,10 @@ wskdev fresh -t local-php
 
 
 To use as docker action push to your own dockerhub account
+```
+docker tag whisk/php8.2Action $user_prefix/action-php-v8.3
+docker push $user_prefix/action-php-v8.3
+```
 ```
 docker tag whisk/php8.2Action $user_prefix/action-php-v8.2
 docker push $user_prefix/action-php-v8.2
