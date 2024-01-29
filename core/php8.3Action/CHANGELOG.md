@@ -17,24 +17,10 @@
 #
 -->
 
-## Apache 1.19.0
-  - No change
+## Initial Release
 
-## Apache 1.18.0
-  - Use php:8.0-cli-buster image to always pull latest patch version
-  - Golang Action loop updatetd to golang 1.20
-  - Support array result include sequence action (#120)
 
-## Apache 1.17.0
-  - Update version of PHP to 8.0.8
-  - Build actionloop from 1.16@1.18.0 (#107)
-  - Resolve akka versions explicitly. (#105, #104)
-
-## Apache 1.16.0
-Initial release
-
-- Added: PHP: 8.0.2
-- Used openwhisk-runtime-go 1.17.0 to build proxy
+- Added: PHP: 8.3.2
 - Added: PHP extensions in addition to the standard ones:
     - bcmath
     - curl
@@ -49,5 +35,5 @@ Initial release
     - zip
     - mongo
 - Added: Composer packages:
-    - [guzzlehttp/guzzle](https://packagist.org/packages/guzzlehttp/guzzle): 7.2.0
-    - [ramsey/uuid](https://packagist.org/packages/ramsey/uuid): 4.1.1
+    - [guzzlehttp/guzzle](https://packagist.org/packages/guzzlehttp/guzzle): 7.8.1
+    - [ramsey/uuid](https://packagist.org/packages/ramsey/uuid): 4.7.5

@@ -23,10 +23,15 @@
 
 ## PHP versions
 
-This runtime provides PHP 8.2, 8.1 and 8.0
+This runtime provides PHP 8.3, 8.2 and 8.1
 
 ### Give it a try today
 To use as a docker action
+
+PHP 8.3:
+```
+wsk action update myAction myAction.php --docker openwhisk/action-php-v8.3:latest
+```
 
 PHP 8.2:
 ```
@@ -38,15 +43,15 @@ PHP 8.1:
 wsk action update myAction myAction.php --docker openwhisk/action-php-v8.1:latest
 ```
 
-PHP 8.0:
-```
-wsk action update myAction myAction.php --docker openwhisk/action-php-v8.0:latest
-```
-
 This works on any deployment of Apache OpenWhisk
 
 ### To use on deployment that contains the runtime as a kind
 To use as a kind action
+
+PHP 8.3:
+```
+wsk action update myAction myAction.php --kind php:8.3
+```
 
 PHP 8.2:
 ```
@@ -58,30 +63,26 @@ PHP 8.1:
 wsk action update myAction myAction.php --kind php:8.1
 ```
 
-PHP 8.0:
-```
-wsk action update myAction myAction.php --kind php:8.0
-```
 
 
 ### Local development
 
 ```
+./gradlew core:php8.3Action:distDocker
 ./gradlew core:php8.2Action:distDocker
 ./gradlew core:php8.1Action:distDocker
-./gradlew core:php8.0Action:distDocker
 ```
-This will produce the images `whisk/action-php-v8.2` and `whisk/action-php-v8.1`, `whisk/action-php-v8.0` respectively.
+This will produce the images `whisk/action-php-v8.3`, `whisk/action-php-v8.2` and `whisk/action-php-v8.1` respectively.
 
 Build and Push image
 ```
 docker login
+./gradlew core:php8.3Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ./gradlew core:php8.2Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ./gradlew core:php8.1Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
-./gradlew core:php8.0Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
-Deploy OpenWhisk using ansible environment that contains the kinds `php:8.2`, `php:8.1` and `php:8.0`
+Deploy OpenWhisk using ansible environment that contains the kinds `php:8.3`, `php:8.2` and `php:8.1`
 Assuming you have OpenWhisk already deploy locally and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
@@ -106,6 +107,10 @@ wskdev fresh -t local-php
 
 To use as docker action push to your own dockerhub account
 ```
+docker tag whisk/php8.2Action $user_prefix/action-php-v8.3
+docker push $user_prefix/action-php-v8.3
+```
+```
 docker tag whisk/php8.2Action $user_prefix/action-php-v8.2
 docker push $user_prefix/action-php-v8.2
 ```
@@ -113,14 +118,10 @@ docker push $user_prefix/action-php-v8.2
 docker tag whisk/php8.1Action $user_prefix/action-php-v8.1
 docker push $user_prefix/action-php-v8.1
 ```
-```
-docker tag whisk/php8.0Action $user_prefix/action-php-v8.0
-docker push $user_prefix/action-php-v8.0
-```
 
 Then create the action using your image from dockerhub
 ```
-wsk action update myAction myAction.php --docker $user_prefix/action-php-v8.0
+wsk action update myAction myAction.php --docker $user_prefix/action-php-v8.1
 ```
 The `$user_prefix` is usually your dockerhub user id.
 

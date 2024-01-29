@@ -15,5 +15,13 @@
  * limitations under the License.
  */
 
-ext.dockerImageName = 'action-php-v8.0'
-apply from: '../../gradle/docker.gradle'
+package runtime.actionContainers
+
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
+
+@RunWith(classOf[JUnitRunner])
+class Php83ActionContainerTests extends Php7ActionContainerTests {
+
+  override lazy val phpContainerImageName = "action-php-v8.3"
+}

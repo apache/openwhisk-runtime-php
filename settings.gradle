@@ -17,9 +17,9 @@
 
 include 'tests'
 
-include 'core:php8.0Action'
 include 'core:php8.1Action'
 include 'core:php8.2Action'
+include 'core:php8.3Action'
 
 rootProject.name = 'runtime-php'
 

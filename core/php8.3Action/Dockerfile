@@ -33,7 +33,7 @@ RUN curl -sL \
   && cd openwhisk-runtime-go-*/main\
   && GO111MODULE=on CGO_ENABLED=0 go build -o /bin/proxy
 
-FROM php:8.0-cli-buster
+FROM php:8.3-cli-bookworm
 
 # select the builder to use
 ARG GO_PROXY_BUILD_FROM=release
@@ -45,10 +45,11 @@ RUN apt-get -y update \
     && apt-get -y install --no-install-recommends \
       unzip \
       libfreetype6 \
-      libicu63 \
+      libicu72 \
       libjpeg62-turbo \
       libpng16-16 \
-      libssl1.1 \
+      libssl3 \
+      libssl-dev \
       libxml2 \
       libzip4 \
       libpq5 \
@@ -60,7 +61,7 @@ RUN apt-get -y update \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
-      postgresql-server-dev-11 \
+      postgresql-server-dev-15 \
     \
     && docker-php-ext-install \
       bcmath \
@@ -74,11 +75,10 @@ RUN apt-get -y update \
       zip \
     \
     && mkdir -p /usr/src/php/ext/mongodb \
-    && curl -fsSL https://pecl.php.net/get/mongodb-1.9.0RC1 | tar xvz -C "/usr/src/php/ext/mongodb" --strip 1 \
+    && curl -fsSL https://pecl.php.net/get/mongodb-1.14.0 | tar xvz -C "/usr/src/php/ext/mongodb" --strip 1 \
     && docker-php-ext-install -j$(nproc) mongodb \
     \
     && apt-get purge -y --auto-remove $PHPIZE_DEPS \
-    && apt-get purge -y --auto-remove libclang-common-7-dev clang-7 llvm-7 llvm-7-dev \
     && apt-get purge -y --auto-remove libfreetype6-dev \
       libicu-dev \
       libjpeg-dev \
@@ -86,7 +86,7 @@ RUN apt-get -y update \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
-      postgresql-server-dev-11 \
+      postgresql-server-dev-15 \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /usr/src/php
