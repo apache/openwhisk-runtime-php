@@ -16,24 +16,24 @@
 #
 
 # build go proxy from source
-FROM golang:1.21 AS builder_source
-ARG GO_PROXY_GITHUB_USER=apache
-ARG GO_PROXY_GITHUB_BRANCH=master
-RUN git clone --branch ${GO_PROXY_GITHUB_BRANCH} \
-   https://github.com/${GO_PROXY_GITHUB_USER}/openwhisk-runtime-go /src ;\
-   cd /src ; env GO111MODULE=on CGO_ENABLED=0 go build main/proxy.go && \
-   mv proxy /bin/proxy
+# FROM golang:1.21 AS builder_source
+# ARG GO_PROXY_GITHUB_USER=apache
+# ARG GO_PROXY_GITHUB_BRANCH=master
+# RUN git clone --branch ${GO_PROXY_GITHUB_BRANCH} \
+#    https://github.com/${GO_PROXY_GITHUB_USER}/openwhisk-runtime-go /src ;\
+#    cd /src ; env GO111MODULE=on CGO_ENABLED=0 go build main/proxy.go && \
+#    mv proxy /bin/proxy
 
-# or build it from a release
-FROM golang:1.21 AS builder_release
-ARG GO_PROXY_RELEASE_VERSION=1.21@1.23.0
-RUN curl -sL \
-  https://github.com/apache/openwhisk-runtime-go/archive/{$GO_PROXY_RELEASE_VERSION}.tar.gz\
-  | tar xzf -\
-  && cd openwhisk-runtime-go-*/main\
-  && GO111MODULE=on CGO_ENABLED=0 go build -o /bin/proxy
+# # or build it from a release
+# FROM golang:1.21 AS builder_release
+# ARG GO_PROXY_RELEASE_VERSION=1.21@1.23.0
+# RUN curl -sL \
+#   https://github.com/apache/openwhisk-runtime-go/archive/{$GO_PROXY_RELEASE_VERSION}.tar.gz\
+#   | tar xzf -\
+#   && cd openwhisk-runtime-go-*/main\
+#   && GO111MODULE=on CGO_ENABLED=0 go build -o /bin/proxy
 
-FROM php:8.3-cli-buster
+FROM php:8.3-cli-bookworm
 
 # select the builder to use
 ARG GO_PROXY_BUILD_FROM=release
@@ -45,10 +45,11 @@ RUN apt-get -y update \
     && apt-get -y install --no-install-recommends \
       unzip \
       libfreetype6 \
-      libicu67 \
+      libicu72 \
       libjpeg62-turbo \
       libpng16-16 \
-      libssl1.1 \
+      libssl3 \
+      libssl-dev \
       libxml2 \
       libzip4 \
       libpq5 \
@@ -60,7 +61,7 @@ RUN apt-get -y update \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
-      postgresql-server-dev-13 \
+      postgresql-server-dev-15 \
     \
     && docker-php-ext-install \
       bcmath \
@@ -92,24 +93,24 @@ RUN apt-get -y update \
 
 COPY php.ini /usr/local/etc/php
 
-# install composer
-RUN curl -s -f -L -o /tmp/installer.php https://getcomposer.org/installer \
-    && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer \
-    && composer --ansi --version --no-interaction --no-plugins --no-scripts
+# # install composer
+# RUN curl -s -f -L -o /tmp/installer.php https://getcomposer.org/installer \
+#     && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer \
+#     && composer --ansi --version --no-interaction --no-plugins --no-scripts
 
-# install default Composer dependencies
-RUN mkdir -p /phpAction/composer
-COPY composer.json /phpAction/composer
-RUN cd /phpAction/composer && /usr/bin/composer install --no-plugins --no-scripts --prefer-dist --no-dev -o && rm composer.lock
+# # install default Composer dependencies
+# RUN mkdir -p /phpAction/composer
+# COPY composer.json /phpAction/composer
+# RUN cd /phpAction/composer && /usr/bin/composer install --no-plugins --no-scripts --prefer-dist --no-dev -o && rm composer.lock
 
-# install proxy binary along with compile and launcher scripts
-RUN mkdir -p /phpAction/action
-WORKDIR /phpAction
-COPY --from=builder_source /bin/proxy /bin/proxy_source
-COPY --from=builder_release /bin/proxy /bin/proxy_release
-RUN mv /bin/proxy_${GO_PROXY_BUILD_FROM} /bin/proxy
-ADD compile.php /bin/compile.php
-ADD runner.php /bin/runner.php
-ENV OW_COMPILER=/bin/compile.php
+# # install proxy binary along with compile and launcher scripts
+# RUN mkdir -p /phpAction/action
+# WORKDIR /phpAction
+# COPY --from=builder_source /bin/proxy /bin/proxy_source
+# COPY --from=builder_release /bin/proxy /bin/proxy_release
+# RUN mv /bin/proxy_${GO_PROXY_BUILD_FROM} /bin/proxy
+# ADD compile.php /bin/compile.php
+# ADD runner.php /bin/runner.php
+# ENV OW_COMPILER=/bin/compile.php
 
-ENTRYPOINT [ "/bin/proxy" ]
+# ENTRYPOINT [ "/bin/proxy" ]
