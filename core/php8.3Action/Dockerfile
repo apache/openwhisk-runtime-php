@@ -86,7 +86,7 @@ RUN apt-get -y update \
       libssl-dev \
       libxml2-dev \
       libzip-dev \
-      postgresql-server-dev-13 \
+      postgresql-server-dev-15 \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /usr/src/php
