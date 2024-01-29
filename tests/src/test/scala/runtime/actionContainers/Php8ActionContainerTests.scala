@@ -27,7 +27,7 @@ import spray.json._
 import spray.json.DefaultJsonProtocol._
 
 @RunWith(classOf[JUnitRunner])
-abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
+abstract class Php8ActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
   // note: "out" will not be empty as the PHP web server outputs a message when it starts up
   val enforceEmptyOutputStream = false
 
@@ -37,7 +37,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     withContainer(phpContainerImageName, env)(code)
   }
 
-  def withPhp7Container(code: ActionContainer => Unit) = withActionContainer()(code)
+  def withPhp8Container(code: ActionContainer => Unit) = withActionContainer()(code)
 
   behavior of phpContainerImageName
 
@@ -132,7 +132,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   it should "return some error on action error" in {
-    val (out, err) = withPhp7Container { c =>
+    val (out, err) = withPhp8Container { c =>
       val code =
         """
           |<?php
@@ -220,7 +220,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   it should "support application errors" in {
-    withPhp7Container { c =>
+    withPhp8Container { c =>
       val code =
         """
           |<?php
@@ -242,7 +242,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   it should "fail gracefully when an action has a fatal error" in {
-    val (out, err) = withPhp7Container { c =>
+    val (out, err) = withPhp8Container { c =>
       val code =
         """
           | <?php
@@ -272,7 +272,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   it should "support returning a stdClass" in {
-    val (out, err) = withPhp7Container { c =>
+    val (out, err) = withPhp8Container { c =>
       val code =
         """
           | <?php
@@ -296,7 +296,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   it should "support returning an object with a getArrayCopy() method" in {
-    val (out, err) = withPhp7Container { c =>
+    val (out, err) = withPhp8Container { c =>
       val code =
         """
           | <?php
@@ -320,7 +320,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
   }
 
   it should "support the documentation examples (1)" in {
-    val (out, err) = withPhp7Container { c =>
+    val (out, err) = withPhp8Container { c =>
       val code =
         """
           | <?php
@@ -354,7 +354,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
   it should "have Guzzle and Uuid packages available" in {
     // GIVEN that it should "error when requiring a non-existent package" (see test above for this)
-    val (out, err) = withPhp7Container { c =>
+    val (out, err) = withPhp8Container { c =>
       val code =
         """
           | <?php
@@ -397,7 +397,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
     // Lest someone should make it too easy.
     code.length should be >= 500000
 
-    val (out, err) = withPhp7Container { c =>
+    val (out, err) = withPhp8Container { c =>
       c.init(initPayload(code))._1 should be(200)
 
       val (runCode, runRes) = c.run(runPayload(JsObject()))
@@ -431,7 +431,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
     val code = ZipBuilder.mkBase64Zip(srcs)
 
-    val (out, err) = withPhp7Container { c =>
+    val (out, err) = withPhp8Container { c =>
       c.init(initPayload(code))._1 should be(200)
 
       val (runCode, runRes) = c.run(runPayload(JsObject()))
@@ -456,7 +456,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
     val code = ZipBuilder.mkBase64Zip(srcs)
 
-    val (out, err) = withPhp7Container { c =>
+    val (out, err) = withPhp8Container { c =>
       c.init(initPayload(code))._1 should be(200)
 
       val (runCode, runRes) = c.run(runPayload(JsObject()))
@@ -479,7 +479,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
     val code = ZipBuilder.mkBase64Zip(srcs)
 
-    withPhp7Container { c =>
+    withPhp8Container { c =>
       c.init(initPayload(code, main = "niam"))._1 should be(200)
 
       val (runCode, runRes) = c.run(runPayload(JsObject()))
@@ -501,7 +501,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
     val code = ZipBuilder.mkBase64Zip(srcs)
 
-    withPhp7Container { c =>
+    withPhp8Container { c =>
       c.init(initPayload(code))._1 should be(200)
 
       val (runCode, runRes) = c.run(runPayload(JsObject()))
@@ -523,7 +523,7 @@ abstract class Php7ActionContainerTests extends BasicActionRunnerTests with WskA
 
     val code = ZipBuilder.mkBase64Zip(srcs)
 
-    withPhp7Container { c =>
+    withPhp8Container { c =>
       c.init(initPayload(code))._1 should be(200)
 
       val (runCode, runRes) = c.run(runPayload(JsArray(JsString("a"), JsString("b"))))
