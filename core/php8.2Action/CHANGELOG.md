@@ -17,8 +17,10 @@
 #
 -->
 
-## Apache 1.19.0
+## Apache 1.20.0
+- Update go proxy to 1.21@1.23.0 (#137)
 
+## Apache 1.19.0
 - Initial release
 
 - Added: PHP: 8.2.8

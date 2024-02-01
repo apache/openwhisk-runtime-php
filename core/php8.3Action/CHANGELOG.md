@@ -17,8 +17,8 @@
 #
 -->
 
-## Initial Release
-
+## Apache 1.20.0
+- Initial Release
 
 - Added: PHP: 8.3.2
 - Added: PHP extensions in addition to the standard ones:
