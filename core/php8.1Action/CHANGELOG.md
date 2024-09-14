@@ -17,6 +17,10 @@
 #
 -->
 
+## Apache 1.21.0
+ - Update go proxy to 1.23@1.25.0 (#143)
+ - Update gradle to 6.9.3 (#144)
+
 ## Apache 1.20.0
 - Update go proxy to 1.21@1.23.0 (#137)
 
